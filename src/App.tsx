@@ -1,14 +1,16 @@
 import './App.css'
+import { Footer } from './components/Footer';
+import Header from "./components/Header";
+import Home from "./components/Home";
 
 function App() {
-
   return (
     <>
-    <div className="text-center mt-20 text-3xl font-bold text-blue-600">
-      Hello world!
-    </div>
+      <Header />
+      <Home />
+      <Footer />
     </>
-  )
+  );
 }
 
-export default App
+export default App;
