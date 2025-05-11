@@ -1,0 +1,81 @@
+{
+    "products": [
+      {
+        "id": 1,
+        "name": "Троянда Карпат",
+        "year": "2018",
+        "type": "Червоне",
+        "price": "280",
+        "country": "Україна",
+        "producer": "Чизай",
+        "description": "Ароматне червоне вино з нотками лісових ягід і легким післясмаком дуба.",
+        "rate": "4.5",
+        "imagePath": "src/assets/products/wine.png"
+      },
+      {
+        "id": 2,
+        "name": "Каберне Совіньйон",
+        "year": "2020",
+        "type": "Червоне сухе",
+        "price": "350",
+        "country": "Франція",
+        "producer": "Château Margaux",
+        "description": "Класичне французьке каберне з насиченим ароматом чорної смородини та прянощів.",
+        "rate": "4.8",
+        "imagePath": "src/assets/products/wine.png"
+
+      },
+      {
+        "id": 3,
+        "name": "Шардоне Біла Скеля",
+        "year": "2021",
+        "type": "Біле сухе",
+        "price": "270",
+        "country": "Україна",
+        "producer": "Князь Трубецький",
+        "description": "Свіже біле вино з ароматом зеленого яблука та цитрусових ноток.",
+        "rate": "4.2",
+        "imagePath": "src/assets/products/wine.png"
+      },
+      {
+        "id": 4,
+        "name": "Ріслінг Мозель",
+        "year": "2019",
+        "type": "Біле напівсолодке",
+        "price": "310",
+        "country": "Німеччина",
+        "producer": "Dr. Loosen",
+        "description": "Легке та фруктове вино з виразною кислотністю і мінеральним післясмаком.",
+        "rate": "4.6",
+        "imagePath": "src/assets/products/wine.png"
+
+      },
+      {
+        "id": 5,
+        "name": "Сапераві",
+        "year": "2017",
+        "type": "Червоне напівсухе",
+        "price": "240",
+        "country": "Грузія",
+        "producer": "Kindzmarauli Marani",
+        "description": "Густе, пряне вино з нотками слив, спецій і легкою терпкістю.",
+        "rate": "4.4",
+        "imagePath": "src/assets/products/wine.png"
+
+      },
+      {
+        "id": 6,
+        "name": "Просекко Вальдобб'ядене",
+        "year": "2022",
+        "type": "Ігристе біле",
+        "price": "330",
+        "country": "Італія",
+        "producer": "Santa Margherita",
+        "description": "Свіже ігристе з ароматом білих квітів і груші. Ідеальне для свят.",
+        "rate": "4.7",
+        "imagePath": "src/assets/products/wine.png"
+
+      }
+    ]
+  }
+  

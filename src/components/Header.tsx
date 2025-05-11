@@ -1,19 +1,16 @@
 import { FC } from "react";
-import logo from "/logo.png";
+import logo from "/logo/logo.png";
 
 const Header: FC = () => {
   return (
     <header className="border-b-1 border-[#FCBA04] bg-[#F3F3F3] mb-1">
       <div className="container mx-15 flex h-[70px] items-center justify-between px-4">
-        {/* Logo + Navigation */}
         <div className="flex items-center gap-12">
-          {/* Logo */}
           <a href="/" className="block h-[65px] w-[65px]">
             <span className="sr-only">Home</span>
             <img src={logo} alt="Logo" className="h-full w-full object-contain" />
           </a>
 
-          {/* Navigation */}
           <nav className="hidden md:block">
             <ul className="flex gap-10 text-xl text-[#5A5A5A] font-medium">
               <li><a className="hover:text-gray-700" href="/wine">Вина</a></li>
@@ -24,7 +21,6 @@ const Header: FC = () => {
           </nav>
         </div>
 
-        {/* Icons */}
         <div className="flex items-center gap-6">
           <a href="/search" aria-label="Пошук">
             <img src="src/assets/search.svg" alt="Пошук" className="h-7 w-7" />

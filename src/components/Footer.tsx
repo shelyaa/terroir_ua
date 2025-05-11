@@ -24,8 +24,8 @@ export const Footer = () => {
             </p>
           </div>
   
-          <div className="flex flex-col md:items-end items-center text-center text-lg text-[#5A5A5A] gap-1">
-            <div className="grid grid-cols-2 gap-y-1 text-lg text-center">
+          <div className="flex flex-col md:items-end items-center text-center text-[#5A5A5A] gap-1 font-manrope">
+            <div className="grid grid-cols-2 gap-y-3 text text-center font-[400]">
               <span className="whitespace-nowrap">Проєкт "Terroir UA"</span>
               <span className="whitespace-nowrap">Instagram</span>
               <span className="whitespace-nowrap">Політика конфіденційності</span>
