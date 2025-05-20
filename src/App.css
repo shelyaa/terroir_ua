@@ -11,6 +11,8 @@ body {
 
 @theme {
     --font-manrope: "Manrope", "sans-serif";
+    --font-cormorant: "Cormorant Garamond", serif;
+    --color-gray: #5A5A5A;
   }
 
 @theme inline {

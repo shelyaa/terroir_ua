@@ -12,7 +12,7 @@ export const Footer = () => {
         <div className="max-w-6xl mx-auto py-5 flex flex-col md:flex-row items-center justify-between text-[#590004]">
           <div className="flex flex-col items-center md:items-start text-center md:text-left">
             <img
-              src="/logo.png"
+              src="/logo/logo.png"
               alt="Logo"
               className="w-50 h-50"
             />

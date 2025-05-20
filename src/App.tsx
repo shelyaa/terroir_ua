@@ -1,22 +1,37 @@
-import { Route, Routes } from 'react-router-dom';
-import './App.css'
-import { Footer } from './components/Footer';
+import { Outlet } from "react-router-dom";
+import "./App.css";
+import { Footer } from "./components/Footer";
 import Header from "./components/Header";
-import Home from "./pages/Home";
-import { Auth } from './pages/Auth';
+import { useState } from "react";
+import { Search } from "./components/Search";
 
+export const App = () => {
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
 
-export function App() {
   return (
-    <>
-      <Header />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/account" element={<Auth />} />
-      </Routes>
-      <Footer />
-    </>
-  );
-}
+    <div className="relative">
+      <Header onOpenSearch={setIsSearchOpen} isSearchOpen={isSearchOpen} />
 
-export default App;
+      {isSearchOpen && (
+        <div
+          className="fixed inset-0 z-30"
+          onClick={() => setIsSearchOpen(false)}
+        ></div>
+      )}
+
+      {isSearchOpen && (
+        <div className="absolute top-[71px] left-0 w-full z-40">
+          <Search />
+        </div>
+      )}
+      <div
+        className={`${isSearchOpen ? "pointer-events-none blur-sm" : ""} relative z-10`}
+      >
+        <main>
+          <Outlet />
+        </main>
+        <Footer />
+      </div>
+    </div>
+  );
+};
