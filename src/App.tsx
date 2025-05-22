@@ -3,7 +3,7 @@ import "./App.css";
 import { Footer } from "./components/Footer";
 import Header from "./components/Header";
 import { useState } from "react";
-import { Search } from "./components/Search";
+import { SearchBar } from "./components/SearchBar";
 
 export const App = () => {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -21,7 +21,7 @@ export const App = () => {
 
       {isSearchOpen && (
         <div className="absolute top-[71px] left-0 w-full z-40">
-          <Search />
+          <SearchBar />
         </div>
       )}
       <div

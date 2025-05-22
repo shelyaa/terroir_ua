@@ -26,8 +26,9 @@ const Header: FC<HeaderProps> = ({onOpenSearch, isSearchOpen}) => {
     `pb-1 inline-flex items-center justify-center w-25 hover:text-black border-b-1 border-[#F3F3F3] ${
       isActive(path) ? "border-gray" : ""
     }`;
+
   return (
-    <header className="border-b-1 border-[#FCBA04] bg-[#F3F3F3] mb-1 relative">
+    <header className="border-b-1 border-[#FCBA04] bg-[#F3F3F3] relative">
       <div className="container mx-15 flex h-[70px] items-center justify-between px-4">
         <div className="flex items-center gap-12">
           <Link to="/" className="block h-[65px] w-[65px]">
@@ -76,21 +77,21 @@ const Header: FC<HeaderProps> = ({onOpenSearch, isSearchOpen}) => {
           <Link
             to="/auth"
             aria-label="Акаунт"
-            className={`${getIconClass("/auth")} ${getIconClass("/register")}  w-10 h-10 flex items-center justify-center`}
+            className={`${getIconClass("/auth")} ${getIconClass("/register")}`}
           >
             <PersonOutlineOutlinedIcon />
           </Link>
           <Link
             to="/favorites"
             aria-label="Улюблене"
-            className={`${getIconClass("/favorites")}  w-10 h-10 flex items-center justify-center`}
+            className={`${getIconClass("/favorites")}`}
           >
             <FavoriteBorderOutlinedIcon />
           </Link>
           <Link
             to="/cart"
             aria-label="Кошик"
-            className={`${getIconClass("/cart")} w-10 h-10 flex items-center justify-center`}
+            className={`${getIconClass("/cart")}`}
           >
             <ShoppingCartOutlinedIcon />
           </Link>

@@ -1,6 +1,6 @@
-import { Label } from "./ui/label";
-import { Input } from "./ui/input";
-import { Button } from "./ui/button";
+import { Label } from "../ui/label";
+import { Input } from "../ui/input";
+import { Button } from "../ui/button";
 import { FcGoogle } from "react-icons/fc";
 import { Link } from "react-router-dom";
 import { FC, useState } from "react";

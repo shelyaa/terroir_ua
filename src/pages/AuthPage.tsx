@@ -1,10 +1,10 @@
-import { AuthForm } from "../components/AuthForm";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { setUser } from "../store/slices/userSlice";
 import { useAppDispatch } from "../hooks/redux-hooks";
 import { useState } from "react";
 import { FirebaseError } from "firebase/app";
+import { AuthForm } from "../components/forms/AuthForm";
 
 export const AuthPage = () => {
   const dispatch = useAppDispatch();

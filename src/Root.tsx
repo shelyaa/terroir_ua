@@ -8,6 +8,7 @@ import {store} from './store';
 import './firebase'
 import { AccountPage } from "./pages/AccountPage";
 import { WinePage } from "./pages/WinePage";
+import { WineDetailsPage } from "./pages/WineDetailsPage";
 
 export const Root = () => (
   <HashRouter>
@@ -20,6 +21,7 @@ export const Root = () => (
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/account" element={<AccountPage />} />
           <Route path="/wine" element={<WinePage />} />
+          <Route path="/wine/:id" element={<WineDetailsPage />} />
           <Route path="*" element={<h1 className="title">Page not found</h1>} />
         </Route>
       </Routes>

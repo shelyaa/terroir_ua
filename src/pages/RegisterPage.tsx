@@ -1,5 +1,5 @@
 import { createUserWithEmailAndPassword, getAuth } from "firebase/auth";
-import { RegisterForm } from "../components/RegisterForm";
+import { RegisterForm } from "../components/forms/RegisterForm";
 import { setUser } from "../store/slices/userSlice";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch } from "../hooks/redux-hooks";

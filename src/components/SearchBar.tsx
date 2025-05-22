@@ -4,7 +4,7 @@ import { SlidersHorizontal } from "lucide-react";
 import { Filtration } from "./Filtration";
 import { X } from "lucide-react";
 
-export const Search = () => {
+export const SearchBar = () => {
   const [isFilterOpen, setIsFilterOpen] = useState(false);
 
   return (

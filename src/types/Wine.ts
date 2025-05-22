@@ -1,6 +1,7 @@
 import { Types } from "./Types";
 
 export type Wine = {
+    volume?: number;
     id: string;
     name: string;
     price: number;

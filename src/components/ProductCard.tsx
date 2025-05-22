@@ -27,15 +27,15 @@ export const ProductCard: React.FC<ProductCardProps> = ({ wine }) => {
           className="max-h-64 object-contain"
         />
 
-        <div className="absolute inset-20 flex items-center justify-center gap-4 opacity-0 group-hover:opacity-100  transition duration-300 z-20 text-white">
-          <Link to='/favorites' className="hover:bg-white rounded-full p-2 transition hover:text-black">
+        <div className="absolute inset-20 flex items-center justify-center gap-4 opacity-0 group-hover:opacity-100  transition duration-300 z-20 text-white font-semibold">
+          <Link to='/favorites' className="hover:bg-white rounded-full p-2 transition hover:text-[#521b1a]">
             <FavoriteBorderOutlinedIcon />
           </Link>
-          <Link to="/cart" className="hover:bg-white rounded-full p-2 transition hover:text-black">
+          <Link to="/cart" className="hover:bg-white rounded-full p-2 transition hover:text-[#521b1a]">
             <ShoppingCartOutlinedIcon />
           </Link>
 
-          <Link to='/details' className="hover:bg-white rounded-full p-2 transition hover:text-black">
+          <Link to={`/wine/${wine.id}`} className="hover:bg-white rounded-full p-2 transition hover:text-[#521b1a]">
             <ChevronRight />
           </Link>
         </div>
@@ -45,7 +45,8 @@ export const ProductCard: React.FC<ProductCardProps> = ({ wine }) => {
         <CardTitle className="text-center">{wine.name}</CardTitle>
       </CardHeader>
 
-      <CardContent className="grid grid-cols-2 font-bold">
+      <CardContent className="flex justify-center items-center gap-25 ">
+        
         <CardDescription>{wine.price} грн</CardDescription>
 
         <div className="flex items-center gap-2 justify-end">
