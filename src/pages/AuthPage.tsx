@@ -1,10 +1,9 @@
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { setUser } from "../store/slices/userSlice";
 import { useAppDispatch } from "../hooks/redux-hooks";
 import { useState } from "react";
-import { FirebaseError } from "firebase/app";
 import { AuthForm } from "../components/forms/AuthForm";
+import axios from "axios";
 
 export const AuthPage = () => {
   const dispatch = useAppDispatch();
@@ -15,35 +14,28 @@ export const AuthPage = () => {
     email: string,
     password: string
   ): Promise<boolean> => {
-    const auth = getAuth();
-
     try {
-      const { user } = await signInWithEmailAndPassword(auth, email, password);
+      const res = await axios.post("http://locallhost:8080/auth/login", {
+        email,
+        password,
+      });
+
+      const { token } = res.data;
+
       dispatch(
         setUser({
-          email: user.email,
-          id: user.uid,
-          token: user.refreshToken,
+          email,
+          token,
+          id: null, // або отримуй ID, якщо повертається
         })
       );
+
+      localStorage.setItem("token", token);
       navigate("/account");
       return true;
-    } catch (error: unknown) {
-      console.error("Login error:", error);
-      const firebaseError = error as FirebaseError;
-
-      switch (firebaseError.code) {
-        case "auth/invalid-email":
-          setError("Неправильний формат електронної пошти.");
-          break;
-        case "auth/user-not-found":
-        case "auth/wrong-password":
-        case "auth/invalid-credential":
-          setError("Неправильно введені дані. Спробуйте ще раз.");
-          break;
-        default:
-          setError("Сталася помилка. Спробуйте ще раз.");
-      }
+    } catch (err: any) {
+      console.error(err);
+      setError("Невірна пошта або пароль.");
       return false;
     }
   };

@@ -1,28 +1,50 @@
-import { createUserWithEmailAndPassword, getAuth } from "firebase/auth";
 import { RegisterForm } from "../components/forms/RegisterForm";
 import { setUser } from "../store/slices/userSlice";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch } from "../hooks/redux-hooks";
+import { useState } from "react";
+import axios from "axios";
 
 export const RegisterPage = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const [error, setError] = useState("");
 
-  const handleRegister = (email: string, password: string) => {
-    const auth = getAuth();
-    createUserWithEmailAndPassword(auth, email, password)
-      .then(({ user }) => {
-        console.log(user);
-        dispatch(
-          setUser({
-            email: user.email,
-            id: user.uid,
-            token: user.refreshToken,
-          })
-        );
-        navigate("/account");
-      })
-      .catch(console.error);
+  const handleRegister = async (
+    email: string,
+    password: string,
+    name: string
+  ): Promise<void> => {
+    try {
+      await axios.post("http://locallhost:8080/auth/registration", {
+        email,
+        password,
+        repeatPassword: password,
+        name,
+      });
+
+      // Після реєстрації одразу логін
+      const loginRes = await axios.post("http://locallhost:8080/auth/login", {
+        email,
+        password,
+      });
+
+      const { token } = loginRes.data;
+
+      dispatch(
+        setUser({
+          email,
+          token,
+          id: null,
+        })
+      );
+
+      localStorage.setItem("token", token);
+      navigate("/account");
+    } catch (err: any) {
+      console.error(err);
+      setError("Помилка при реєстрації. Спробуйте ще раз.");
+    }
   };
   return (
     <div className="mx-auto grid grid-cols-2 py-12 max-w-6xl items-start gap-5">
@@ -37,7 +59,7 @@ export const RegisterPage = () => {
         <h1 className="text-3xl font-semibold max-w-md mx-auto mb-6">
           Реєстрація
         </h1>
-        <RegisterForm handleClick={handleRegister} />
+        <RegisterForm handleClick={handleRegister} error={error}/>
       </div>
     </div>
   );

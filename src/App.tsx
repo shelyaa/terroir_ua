@@ -21,11 +21,11 @@ export const App = () => {
 
       {isSearchOpen && (
         <div className="absolute top-[71px] left-0 w-full z-40">
-          <SearchBar />
+          <SearchBar setIsSearchOpen={setIsSearchOpen} />
         </div>
       )}
       <div
-        className={`${isSearchOpen ? "pointer-events-none blur-sm" : ""} relative z-10`}
+        className={`${isSearchOpen ? "pointer-events-none blur-xs" : ""} relative z-10`}
       >
         <main>
           <Outlet />

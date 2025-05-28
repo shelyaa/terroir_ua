@@ -24,7 +24,6 @@ export const WineDetails = () => {
     return <div className="text-center text-xl mt-10">Завантаження...</div>;
 
   return (
-    <div className="bg-[#F3F3F3]">
       <div className="max-w-6xl mx-auto px-6 py-8 font-manrope font-medium text-sm ">
         <Link
           to="/wine"
@@ -154,7 +153,6 @@ export const WineDetails = () => {
                 </button>
               </div>
             </div>
-          </div>
         </div>
       </div>
     </div>

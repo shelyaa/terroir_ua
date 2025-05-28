@@ -6,6 +6,7 @@ interface Props {
 }
 
 const wineTypes = [
+  { label: "Усі", value: "Усі" },
   { label: "Червоні", value: "Червоне" },
   { label: "Білі", value: "Біле" },
   { label: "Рожеві", value: "Рожеве" },

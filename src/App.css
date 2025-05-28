@@ -13,6 +13,9 @@ body {
     --font-manrope: "Manrope", "sans-serif";
     --font-cormorant: "Cormorant Garamond", serif;
     --color-gray: #5A5A5A;
+    --color-yellow: #FCBA04;
+    --color-bordo: #590004;
+    --color-light_yellow: #FFC629;
   }
 
 @theme inline {

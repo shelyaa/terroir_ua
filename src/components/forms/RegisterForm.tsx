@@ -6,15 +6,16 @@ import { Link } from "react-router-dom";
 import { FC, useState } from "react";
 
 interface FormProps {
-  handleClick: (email: string, pass: string) => void;
+  handleClick: (email: string, pass: string, name: string) => void;
+  error?: string;
 }
 
-export const RegisterForm: FC<FormProps> = ({ handleClick }) => {
+export const RegisterForm: FC<FormProps> = ({ handleClick, error }) => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [checkPassword, setCheckPassword] = useState("");
-  const [error, setError] = useState("");
+  const [localError, setLocalError] = useState("");
 
   const isLongEnough = password.length >= 8;
   const isAlphaNumeric = /^[A-Za-z0-9]+$/.test(password);
@@ -23,19 +24,19 @@ export const RegisterForm: FC<FormProps> = ({ handleClick }) => {
     e.preventDefault();
 
     if (!isLongEnough || !isAlphaNumeric) {
-      setError(
+      setLocalError(
         "Пароль має містити латинські літери та цифри і бути не менше 8 символів."
       );
       return;
     }
 
     if (password !== checkPassword) {
-      setError("Паролі не співпадають.");
+      setLocalError("Паролі не співпадають.");
       return;
     }
 
-    setError("");
-    handleClick(email, password);
+    setLocalError("");
+    handleClick(email, password, name);
   };
 
   return (
@@ -87,16 +88,16 @@ export const RegisterForm: FC<FormProps> = ({ handleClick }) => {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
-        {!!password.length &&
-         ( <div className="text-sm space-y-1">
+        {!!password.length && (
+          <div className="text-sm space-y-1">
             <p className={isAlphaNumeric ? "text-green-600" : "text-gray-500"}>
               Використовуйте латинські літери і цифри {isAlphaNumeric && "✔"}
             </p>
             <p className={isLongEnough ? "text-green-600" : "text-gray-500"}>
               Не менше 8 знаків {isLongEnough && "✔"}
             </p>
-          </div>)
-        }
+          </div>
+        )}
       </div>
 
       <div className="space-y-2">
@@ -114,7 +115,11 @@ export const RegisterForm: FC<FormProps> = ({ handleClick }) => {
         />
       </div>
 
-      
+      {(error || localError) && (
+        <div className="text-red-600 text-sm text-center">
+          {error || localError}
+        </div>
+      )}
 
       <div className="text-sm text-center">
         <span className="text-muted-foreground">Забув пароль? </span>

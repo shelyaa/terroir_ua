@@ -28,7 +28,7 @@ const Header: FC<HeaderProps> = ({onOpenSearch, isSearchOpen}) => {
     }`;
 
   return (
-    <header className="border-b-1 border-[#FCBA04] bg-[#F3F3F3] relative">
+    <header className="border-b-1 border-[#FCBA04] bg-[#F3F3F3] relative mb-1">
       <div className="container mx-15 flex h-[70px] items-center justify-between px-4">
         <div className="flex items-center gap-12">
           <Link to="/" className="block h-[65px] w-[65px]">

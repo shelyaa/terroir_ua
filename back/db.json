@@ -20,8 +20,8 @@
         "volume": 750
       },
       {
-        "id": "1",
-        "name": "Троянда Карпат",
+        "id": "2",
+        "name": "Троянда",
         "price": 280,
         "description": "Ароматне червоне вино з нотками лісових ягід і легким післясмаком дуба.",
         "imagePath": "src/assets/products/wine.png",
@@ -32,7 +32,7 @@
         "producer": "Чизай",
         "sweetness": "напівсухе",
         "isDeleted": false,
-        "rate": "4,8",
+        "rate": 4,
         "type": "Червоне",
         "ownerDescription": "Особливо добре смакує з дичиною",
         "variety": "Каберне",
