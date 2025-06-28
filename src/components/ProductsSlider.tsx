@@ -10,14 +10,15 @@ export const ProductSlider: FC = () => {
     fetch("http://localhost:8080/wines")
       .then((response) => response.json())
       .then((data) => {
-        setProducts(data);
+        console.log("Отримані дані:", data);
+        setProducts(data.content);
         setLoading(false);
       })
       .catch((error) => {
         console.error("Помилка при отриманні даних:", error);
         setLoading(false);
       });
-  }, []);
+  }, []); 
 
   if (loading) return <p>Завантаження...</p>;
 

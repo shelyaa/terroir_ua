@@ -2,11 +2,30 @@ import { Outlet } from "react-router-dom";
 import "./App.css";
 import { Footer } from "./components/Footer";
 import Header from "./components/Header";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { SearchBar } from "./components/SearchBar";
+import { useAppDispatch } from "./hooks/redux-hooks";
+import { setUser } from "./store/slices/userSlice";
 
 export const App = () => {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const dispatch = useAppDispatch();
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const userStr = localStorage.getItem("user");
+    console.log("userStr з localStorage:", userStr);
+
+    if (userStr) {
+      const user = JSON.parse(userStr);
+      dispatch(setUser(user));
+      console.log("dispatch setUser:", user);
+    }
+    setLoading(false); // Завжди після спроби зчитати user
+  }, [dispatch]);
+
+  // Не показуємо нічого, поки не завершили відновлення користувача
+  if (loading) return null; // або можна рендерити спінер
 
   return (
     <div className="relative">
@@ -24,6 +43,7 @@ export const App = () => {
           <SearchBar setIsSearchOpen={setIsSearchOpen} />
         </div>
       )}
+
       <div
         className={`${isSearchOpen ? "pointer-events-none blur-xs" : ""} relative z-10`}
       >

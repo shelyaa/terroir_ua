@@ -1,5 +1,4 @@
-import { useState } from "react";
-import { getWines } from "../api/wines";
+import { useEffect, useState } from "react";
 import { Filters, FiltersQuery } from "../types/Filters";
 import { SelectableButton } from "./SelectableButton";
 
@@ -12,15 +11,15 @@ const typeOptions = [
   "Портвейн",
   "Апельсинове",
 ];
-const priceRanges = [
+const priceRangesOptions = [
   { label: "До 200 грн", min: 0, max: 200 },
   { label: "200–400 грн", min: 200, max: 400 },
   { label: "400–600 грн", min: 400, max: 600 },
   { label: "600–1000 грн", min: 600, max: 1000 },
-  { label: "Понад 1000 грн", min: 1000, max: null },
+  { label: "Понад 1000 грн", min: 1000, max: 50000 },
 ];
 const yearOptions = [
-  { label: "До 2015", min: null, max: 2014 },
+  { label: "До 2015", min: 0, max: 2014 },
   { label: "2015–2019", min: 2015, max: 2019 },
   { label: "2020", min: 2020, max: 2020 },
   { label: "2021", min: 2021, max: 2021 },
@@ -40,7 +39,11 @@ const producerOptions = [
   "SliVino Village",
 ];
 
-export const Filtration = () => {
+export const Filtration = ({
+  searchParams,
+  setSearchParams,
+  setIsFilterOpen,
+}) => {
   const [filters, setFilters] = useState<Filters>({
     types: [],
     priceRanges: [],
@@ -48,6 +51,47 @@ export const Filtration = () => {
     producers: [],
     name: "",
   });
+
+  function findMatchingOptions(
+    min: number,
+    max: number,
+    options: { min: number; max: number | null }[]
+  ) {
+    return options.filter(
+      (opt) => opt.min >= min && (opt.max ?? Infinity) <= max
+    );
+  }
+
+  useEffect(() => {
+    const types = searchParams.get("type")?.split(",").filter(Boolean) ?? [];
+    const producers =
+      searchParams.get("producer")?.split(",").filter(Boolean) ?? [];
+
+    const minPrice = searchParams.get("minPrice")
+      ? Number(searchParams.get("minPrice"))
+      : undefined;
+    const maxPrice = searchParams.get("maxPrice")
+      ? Number(searchParams.get("maxPrice"))
+      : undefined;
+    const priceRanges =
+      minPrice !== undefined && maxPrice !== undefined
+        ? findMatchingOptions(minPrice, maxPrice, priceRangesOptions)
+        : [];
+
+    const minYear = searchParams.get("minYear")
+      ? Number(searchParams.get("minYear"))
+      : undefined;
+    const maxYear = searchParams.get("maxYear")
+      ? Number(searchParams.get("maxYear"))
+      : undefined;
+    const yearRanges =
+      minYear !== undefined && maxYear !== undefined
+        ? findMatchingOptions(minYear, maxYear, yearOptions)
+        : [];
+
+    const name = searchParams.get("name") ?? "";
+    setFilters({ types, priceRanges, yearRanges, producers, name });
+  }, [searchParams]);
 
   const buildFiltersQuery = (filters: Filters): FiltersQuery => {
     return {
@@ -74,7 +118,7 @@ export const Filtration = () => {
       name: filters.name.trim() || undefined,
     };
   };
-  
+
   const toggleType = (type: string) => {
     setFilters((prev) => ({
       ...prev,
@@ -115,7 +159,6 @@ export const Filtration = () => {
       };
     });
   };
-  
 
   const toggleProducer = (producer: string) => {
     setFilters((prev) => ({
@@ -129,45 +172,83 @@ export const Filtration = () => {
   const handleSearch = async () => {
     const queryPayload = buildFiltersQuery(filters);
 
-  
-    if (filters.priceRanges.length) {
-      queryPayload.minPrice = Math.min(...filters.priceRanges.map((r) => r.min));
-      const definedMax = filters.priceRanges
-        .filter((r) => r.max !== null)
-        .map((r) => r.max as number);
-      if (definedMax.length > 0) {
-        queryPayload.maxPrice = Math.max(...definedMax);
-      }
-    }
-  
-    if (filters.yearRanges.length) {
-      const definedMin = filters.yearRanges
-        .filter((r) => r.min !== null)
-        .map((r) => r.min as number);
-      const definedMax = filters.yearRanges
-        .filter((r) => r.max !== null)
-        .map((r) => r.max as number);
-  
-      if (definedMin.length > 0) {
-        queryPayload.minYear = Math.min(...definedMin);
-      }
-  
-      if (definedMax.length > 0) {
-        queryPayload.maxYear = Math.max(...definedMax);
-      }
-    }
-  
-    const wines = await getWines(queryPayload);
-    console.log("Результати пошуку:", wines);
+    const params: Record<string, string> = {};
+    if (queryPayload.types) params.type = queryPayload.types.join(",");
+    if (queryPayload.minPrice !== undefined)
+      params.minPrice = queryPayload.minPrice.toString();
+    if (queryPayload.maxPrice !== undefined)
+      params.maxPrice = queryPayload.maxPrice.toString();
+    if (queryPayload.minYear !== undefined)
+      params.minYear = queryPayload.minYear.toString();
+    if (queryPayload.maxYear !== undefined)
+      params.maxYear = queryPayload.maxYear.toString();
+    if (queryPayload.producers)
+      params.producer = queryPayload.producers.join(",");
+    if (queryPayload.name) params.name = queryPayload.name;
+
+    setSearchParams(params);
+    console.log(params);
+    setIsFilterOpen(false);
   };
-  
+
+  const clearFilters = () => {
+    setFilters({
+      types: [],
+      priceRanges: [],
+      yearRanges: [],
+      producers: [],
+      name: "",
+    });
+  };
+
+  const clearTypes = () => {
+    setFilters((prev) => ({
+      ...prev,
+      types: [],
+    }));
+  };
+  const clearPriceRanges = () => {
+    setFilters((prev) => ({
+      ...prev,
+      priceRanges: [],
+    }));
+  };
+  const clearYearRanges = () => {
+    setFilters((prev) => ({
+      ...prev,
+      yearRanges: [],
+    }));
+  };
+  const clearProducers = () => {
+    setFilters((prev) => ({
+      ...prev,
+      producers: [],
+    }));
+  };
 
   return (
     <div>
-      <h2 className="text-3xl font-semibold my-4 ml-1">Фільтри</h2>
+      <div className="my-4 ml-1 flex gap-4 items-baseline">
+        <h2 className="text-3xl font-semibold ">Фільтри</h2>
+        <button
+          className="font-manrope text-sm text-light-gray font-medium cursor-pointer"
+          onClick={clearFilters}
+        >
+          Очистити всі фільтри
+        </button>
+      </div>
+
       <div className="grid grid-cols-2 *:mb-10 *:w-[450px]">
         <div>
-          <h3 className="text-2xl mb-6 font-medium ml-2">Тип вина</h3>
+          <div className="flex gap-4 items-baseline">
+            <h3 className="text-2xl mb-6 font-medium ml-2">Тип вина</h3>
+            <button
+              className="font-manrope text-sm text-light-gray font-medium pt-1 cursor-pointer"
+              onClick={clearTypes}
+            >
+              Очистити
+            </button>
+          </div>
 
           <div className="flex flex-wrap gap-4 w-[480px]">
             {typeOptions.map((type) => (
@@ -182,9 +263,17 @@ export const Filtration = () => {
         </div>
 
         <div>
-          <h3 className="text-2xl mb-6 font-medium ml-2">Ціна (грн)</h3>
+          <div className="flex gap-4 items-baseline">
+            <h3 className="text-2xl mb-6 font-medium ml-2">Ціна</h3>
+            <button
+              className="font-manrope text-sm text-light-gray font-medium pt-1 cursor-pointer"
+              onClick={clearPriceRanges}
+            >
+              Очистити
+            </button>
+          </div>
           <div className="flex flex-wrap gap-3">
-            {priceRanges.map(({ label, min, max }) => (
+            {priceRangesOptions.map(({ label, min, max }) => (
               <SelectableButton
                 key={label}
                 label={label}
@@ -198,13 +287,23 @@ export const Filtration = () => {
         </div>
 
         <div>
-          <h3 className="text-2xl mb-6 font-medium ml-2">Рік урожаю</h3>
+          <div className="flex gap-4 items-baseline">
+            <h3 className="text-2xl mb-6 font-medium ml-2">Рік урожаю</h3>
+            <button
+              className="font-manrope text-sm text-light-gray font-medium pt-1 cursor-pointer"
+              onClick={clearYearRanges}
+            >
+              Очистити
+            </button>
+          </div>
           <div className="flex flex-wrap gap-2">
             {yearOptions.map(({ label, min, max }) => (
               <SelectableButton
                 key={label}
                 label={label}
-                selected={filters.yearRanges.some((p) => p.min === min && p.max == max)}
+                selected={filters.yearRanges.some(
+                  (p) => p.min === min && p.max == max
+                )}
                 onClick={() => toggleYearRange(min, max)}
               />
             ))}
@@ -212,9 +311,17 @@ export const Filtration = () => {
         </div>
 
         <div>
-          <h3 className="text-2xl mb-6 font-medium ml-2">
-            Виноробня (виробник)
-          </h3>
+          <div className="flex gap-4 items-baseline">
+            <h3 className="text-2xl mb-6 font-medium ml-2">
+              Виноробня (виробник)
+            </h3>
+            <button
+              className="font-manrope text-sm text-light-gray font-medium pt-1 cursor-pointer"
+              onClick={clearProducers}
+            >
+              Очистити
+            </button>
+          </div>
           <div className="grid grid-cols-2 gap-2 max-w-md font-manrope text-sm font-medium">
             {producerOptions.map((producer) => (
               <label key={producer} className="flex items-center gap-2">
@@ -231,7 +338,10 @@ export const Filtration = () => {
         </div>
 
         <div>
-          <button className="px-30 py-3 bg-[#521b1a] text-white hover:bg-[#6b2a28] transition font-semibold font-manrope text-sm" onClick={handleSearch}>
+          <button
+            className="px-30 py-3 bg-[#521b1a] text-white hover:bg-[#6b2a28] transition font-semibold font-manrope text-sm"
+            onClick={handleSearch}
+          >
             Шукати →
           </button>
         </div>

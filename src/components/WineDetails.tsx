@@ -125,7 +125,7 @@ export const WineDetails = () => {
 
           <div className="items-center">
             <img
-              src={wine.imagePath}
+              src={wine.imageUrl}
               alt={wine.name}
               className="w-125 object-contain"
             />

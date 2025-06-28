@@ -6,7 +6,7 @@ export type Wine = {
     name: string;
     price: number;
     description: string;
-    imagePath: string;
+    imageUrl: string;
     agingMethod?: string;
     region?: string;
     dateAdded?: Date;

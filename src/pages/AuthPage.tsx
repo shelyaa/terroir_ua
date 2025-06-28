@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { setUser } from "../store/slices/userSlice";
 import { useAppDispatch } from "../hooks/redux-hooks";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AuthForm } from "../components/forms/AuthForm";
 import axios from "axios";
 
@@ -10,27 +10,45 @@ export const AuthPage = () => {
   const navigate = useNavigate();
   const [error, setError] = useState("");
 
+  useEffect(() => {
+    const userStr = localStorage.getItem("user");
+    if (userStr) {
+      const user = JSON.parse(userStr);
+      dispatch(setUser(user));
+    }
+  }, [dispatch]);
+
   const handleLogin = async (
     email: string,
     password: string
   ): Promise<boolean> => {
     try {
-      const res = await axios.post("http://locallhost:8080/auth/login", {
+      const res = await axios.post("http://localhost:8080/auth/login", {
         email,
         password,
       });
-
       const { token } = res.data;
+
+      const meRes = await axios.get("http://localhost:8080/users/me", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const { id, name, email: userEmail } = meRes.data;
 
       dispatch(
         setUser({
-          email,
+          id,
+          name,
+          email: userEmail,
           token,
-          id: null, // або отримуй ID, якщо повертається
         })
       );
+      localStorage.setItem(
+        "user",
+        JSON.stringify({ id, name, email: userEmail, token })
+      );
 
-      localStorage.setItem("token", token);
       navigate("/account");
       return true;
     } catch (err: any) {
@@ -43,7 +61,7 @@ export const AuthPage = () => {
   return (
     <div className="mx-auto grid grid-cols-2 py-12 max-w-6xl items-start gap-5">
       <div className="w-full">
-        <img src="/photos/grape.png" alt="grape-photo" className=" w-180 " />
+        <img src="/photos/grape.png" alt="grape-photo" className="w-180" />
       </div>
       <div className="w-full">
         <h1 className="text-3xl font-semibold max-w-md mx-auto mb-6">

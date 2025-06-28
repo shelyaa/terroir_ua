@@ -1,5 +1,5 @@
 export interface Filters {
-  types: string[] | string;
+  types: string[];
   priceRanges: { min: number; max: number | null }[];
   yearRanges: { min: number | null; max: number | null }[];
   producers: string[];

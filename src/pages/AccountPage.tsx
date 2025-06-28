@@ -3,17 +3,14 @@ import { useAuth } from "../hooks/use-auth";
 import { Account } from "../components/Account";
 
 export const AccountPage = () => {
-  const { isAuth, email } = useAuth();
+  const { isAuth } = useAuth();
 
-  
-return isAuth ? (
-  <div className="mx-auto py-12 max-w-7xl items-start">
-    <h1 className="text-3xl font-semibold  mb-6">
-      Мій профіль
-    </h1>
-    <Account email={email} />
-  </div>
+  return isAuth ? (
+    <div className="mx-auto py-12 max-w-7xl items-start">
+      <h1 className="text-3xl font-semibold  mb-6">Мій профіль</h1>
+      <Account />
+    </div>
   ) : (
-      <Navigate to="/auth" replace />
-);
+    <Navigate to="/auth" replace />
+  );
 };

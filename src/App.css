@@ -16,6 +16,7 @@ body {
     --color-yellow: #FCBA04;
     --color-bordo: #590004;
     --color-light_yellow: #FFC629;
+    --color-light-gray: #9F9F9F;
   }
 
 @theme inline {

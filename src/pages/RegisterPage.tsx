@@ -16,15 +16,14 @@ export const RegisterPage = () => {
     name: string
   ): Promise<void> => {
     try {
-      await axios.post("http://locallhost:8080/auth/registration", {
+      await axios.post("http://localhost:8080/auth/registration", {
         email,
         password,
         repeatPassword: password,
         name,
       });
 
-      // Після реєстрації одразу логін
-      const loginRes = await axios.post("http://locallhost:8080/auth/login", {
+      const loginRes = await axios.post("http://localhost:8080/auth/login", {
         email,
         password,
       });
@@ -35,11 +34,11 @@ export const RegisterPage = () => {
         setUser({
           email,
           token,
-          id: null,
+          name,
         })
       );
 
-      localStorage.setItem("token", token);
+      localStorage.setItem("user", JSON.stringify({ email, token, name }));
       navigate("/account");
     } catch (err: any) {
       console.error(err);
