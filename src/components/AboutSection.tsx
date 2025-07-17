@@ -23,7 +23,7 @@ const AboutSection = () => {
             Бессарабії та інші скарби українського виноробства.
           </p>
           <Link to="/wine">
-            <button className="mt-6 px-6 py-3 bg-[#521b1a] text-white hover:bg-[#6b2a28] transition font-manrope">
+            <button className="mt-6 px-6 py-3 bg-[#521b1a] text-white hover:bg-[#6b2a28] transition font-manrope" type="button">
               Обрати зараз →
             </button>
           </Link>

@@ -1,7 +1,7 @@
 import { Outlet } from "react-router-dom";
 import "./App.css";
 import { Footer } from "./components/Footer";
-import Header from "./components/Header";
+import { Header } from "./components/Header";
 import { useEffect, useState } from "react";
 import { SearchBar } from "./components/SearchBar";
 import { useAppDispatch } from "./hooks/redux-hooks";

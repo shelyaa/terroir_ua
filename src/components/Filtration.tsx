@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Filters, FiltersQuery } from "../types/Filters";
 import { SelectableButton } from "./SelectableButton";
 
-const typeOptions = [
+ const typeOptions = [
   "Червоне",
   "Біле",
   "Рожеве",

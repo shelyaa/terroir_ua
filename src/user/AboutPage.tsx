@@ -1,15 +1,16 @@
+import { FadeImage } from "../utils/FadeImage";
+
 export const AboutPage = () => {
   return (
     <div className="">
       <div className="max-h-[491px] mb-20">
-        <img src="/photos/about1.jpg" alt="about1" />
+        <FadeImage src="/photos/about1.jpg" alt="about1" />
       </div>
       <div className="mb-20 flex flex-col lg:flex-row gap-5 items-center max-w-7xl mx-auto">
         <div className="w-full lg:w-[560px] flex justify-center">
-          <img
+          <FadeImage
             src="/photos/about2.png"
             alt="wine-bottle"
-            className="w-full h-auto max-w-[310px] object-contain"
           />
         </div>
         <div className="w-full lg:w-[512px] text-center lg:text-left">

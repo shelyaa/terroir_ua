@@ -9,7 +9,12 @@ export const HomePage = () => {
       <HeroSlider />
       <AboutSection />
       <AdvantagesSection />
-      <ProductSlider />
+      <div className="my-12">
+        <h1 className="text-[#250001] text-center text-3xl font-semibold mb-10">
+          Пропозиції місяця
+        </h1>
+        <ProductSlider />
+      </div>
     </main>
   );
 };

@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { FadeImage } from "../utils/FadeImage";
 
 const slides = [
   {
@@ -40,10 +41,9 @@ const HeroSlider = () => {
 
   return (
     <section className="relative w-full h-[735px] overflow-hidden group transition-all duration-500">
-      <img
+      <FadeImage
         src={slides[current].image}
         alt={slides[current].title}
-        className="w-full h-full object-cover duration-1000 ease-in-out transition-opacity"
       />
 
       <div className="absolute inset-0 bg-black/50 z-10 pointer-events-none"></div>

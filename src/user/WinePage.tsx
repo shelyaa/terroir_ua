@@ -8,6 +8,8 @@ import { Filtration } from "../components/Filtration";
 import { useSearchParams } from "react-router-dom";
 import { FiltersQuery } from "../types/Filters";
 import { Loading } from "../components/ui/loading";
+import PaginationRounded from "../components/Pagination";
+import { ProductSlider } from "../components/ProductsSlider";
 
 export const WinePage = () => {
   const [wines, setWines] = useState<Wine[]>([]);
@@ -15,10 +17,12 @@ export const WinePage = () => {
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [searchParams, setSearchParams] = useSearchParams();
+  const [page, setPage] = useState(0);
+  const [totalPages, setTotalPages] = useState(0);
 
   // Допоміжна функція для формування параметрів фільтрації
   const getQueryParams = (): FiltersQuery => {
-    const params: FiltersQuery = {};
+    const params: FiltersQuery = { page };
     const getArr = (key: string): string[] | undefined =>
       searchParams.get(key)?.split(",") ?? undefined;
     if (searchParams.get("type")) params.types = getArr("type");
@@ -37,12 +41,13 @@ export const WinePage = () => {
   useEffect(() => {
     const fetchData = async () => {
       setIsLoading(true);
-      setWines([]); // очищаємо попередній масив, щоб нічого не мигало
+      setWines([]);
       try {
         // (опційно) штучна затримка для демо-ефекту лоадера
         await new Promise((resolve) => setTimeout(resolve, 300));
         const result = await getWines(getQueryParams());
-        setWines(result);
+        setWines(result.content);
+        setTotalPages(result.totalPages);
       } catch (e) {
         console.error("Помилка при отриманні вин:", e);
         setWines([]);
@@ -51,7 +56,7 @@ export const WinePage = () => {
       }
     };
     fetchData();
-  }, [searchParams, selectedType]);
+  }, [searchParams, selectedType, page]);
 
   const handleSelectType = (type: string) => {
     const params = new URLSearchParams(searchParams.toString());
@@ -60,6 +65,7 @@ export const WinePage = () => {
     } else {
       params.set("type", type);
     }
+    setPage(0); // Скидаємо сторінку на 0 при зміні типу
     setSearchParams(params);
     setSelectedType(type);
   };
@@ -84,7 +90,6 @@ export const WinePage = () => {
             Наші вина
           </h1>
         )}
-
 
         {isFilterOpen && (
           <Filtration
@@ -115,6 +120,12 @@ export const WinePage = () => {
           </div>
         )}
 
+        {searchParams && (
+          <div>
+            <h2 className="text-3xl font-semibold">Застосовані фільтри: {searchParams}</h2>
+          </div>
+        )}
+
         {isLoading ? (
           <div className="flex justify-center items-center min-h-[300px]">
             <Loading />
@@ -127,11 +138,26 @@ export const WinePage = () => {
           !isFilterOpen && (
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6 mt-6">
               {wines.map((wine) => (
-                <ProductCard key={wine.name} wine={wine} />
+                <ProductCard key={wine.id} wine={wine} />
               ))}
             </div>
           )
         )}
+      </div>
+      {wines.length !== 0 && (
+        <div className="mt-8 flex justify-center">
+          <PaginationRounded
+            page={page}
+            totalPages={totalPages}
+            onChange={setPage}
+          />
+        </div>
+      )}
+      <div className="my-12">
+        <h1 className="text-[#250001] text-center text-3xl font-semibold mb-10">
+          Пропозиції місяця
+        </h1>
+        <ProductSlider />
       </div>
     </div>
   );

@@ -2,7 +2,10 @@ import { Link } from "react-router-dom";
 
 export const Footer = () => {
   return (
-    <footer className="bg-white text-[#521b1a]">
+    <footer
+      className="  bg-[#F3F3F3]
+ text-[#521b1a]"
+    >
       <div>
         <img
           src="/src/assets/vineyard.png"

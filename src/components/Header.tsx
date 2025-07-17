@@ -1,34 +1,21 @@
 import { FC } from "react";
 import logo from "/logo/logo.png";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
 import SearchIcon from "@mui/icons-material/Search";
 import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
 import { useAuth } from "../hooks/use-auth";
+import { getIconClass, getPageClass } from "../utils/navigationStyles";
 
 type HeaderProps = {
   isSearchOpen: boolean;
   onOpenSearch: (isSearchOpen: boolean) => void;
 };
 
-const Header: FC<HeaderProps> = ({ onOpenSearch, isSearchOpen }) => {
+export const Header: FC<HeaderProps> = ({ onOpenSearch, isSearchOpen }) => {
   const location = useLocation();
   const isActive = (path: string) => location.pathname === path;
-  const navigate = useNavigate();
-    const { isAuth } = useAuth();
-  
-
-  const getIconClass = (path: string) =>
-    `p-2 rounded-full transition duration-200 w-10 h-10 flex items-center justify-center hover:text-black ${
-      isActive(path)
-        ? "border-1 border-[#590004] text-[#590004] bg-white"
-        : "text-[#5A5A5A]"
-    }`;
-
-  const getPageClass = (path: string) =>
-    `pb-1 inline-flex items-center justify-center w-25 hover:text-black border-b-1 border-[#F3F3F3] ${
-      isActive(path) ? "border-gray" : ""
-    }`;
+  const { isAuth } = useAuth();
 
   return (
     <header className="border-b-1 border-[#FCBA04] bg-[#F3F3F3] relative mb-1">
@@ -46,22 +33,34 @@ const Header: FC<HeaderProps> = ({ onOpenSearch, isSearchOpen }) => {
           <nav className="hidden md:block">
             <ul className="flex gap-5 text-xl text-[#5A5A5A] font-medium">
               <li>
-                <Link to="/wine" className={`${getPageClass("/wine")}`}>
+                <Link
+                  to="/wine"
+                  className={`${getPageClass("/wine", isActive)}`}
+                >
                   Вина
                 </Link>
               </li>
               <li>
-                <Link className={`${getPageClass("/winery")}`} to="/winery">
+                <Link
+                  className={`${getPageClass("/winery", isActive)}`}
+                  to="/winery"
+                >
                   Виноробні
                 </Link>
               </li>
               <li>
-                <Link className={`${getPageClass("/about")}`} to="/about">
+                <Link
+                  className={`${getPageClass("/about", isActive)}`}
+                  to="/about"
+                >
                   Про нас
                 </Link>
               </li>
               <li>
-                <Link className={`${getPageClass("/contacts")}`} to="/contacts">
+                <Link
+                  className={`${getPageClass("/contacts", isActive)}`}
+                  to="/contacts"
+                >
                   Контакти
                 </Link>
               </li>
@@ -83,15 +82,15 @@ const Header: FC<HeaderProps> = ({ onOpenSearch, isSearchOpen }) => {
           <Link
             to={isAuth ? "/account" : "/auth"}
             aria-label="Акаунт"
-            className={`${getIconClass("/auth")} ${getIconClass("/register")}`}
+            className={`${getIconClass("/auth", isActive)} ${getIconClass("/register", isActive)} ${getIconClass("/account", isActive)}`}
           >
             <PersonOutlineOutlinedIcon />
           </Link>
 
           <Link
-            to="/cart"
+            to="/order"
             aria-label="Кошик"
-            className={`${getIconClass("/cart")}`}
+            className={`${getIconClass("/order", isActive)}`}
           >
             <ShoppingCartOutlinedIcon />
           </Link>
@@ -100,5 +99,3 @@ const Header: FC<HeaderProps> = ({ onOpenSearch, isSearchOpen }) => {
     </header>
   );
 };
-
-export default Header;

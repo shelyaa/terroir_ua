@@ -15,11 +15,13 @@ export const AuthForm: FC<FormProps> = ({ handleClick, error, setError }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const success = await handleClick(email, password);
     if (success) {
       setError("");
+      
     }
   };
 

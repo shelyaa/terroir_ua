@@ -2,29 +2,35 @@ import { FC, useEffect, useState, useCallback } from "react";
 import useEmblaCarousel from "embla-carousel-react";
 import { ProductCard } from "./ProductCard";
 import { Wine } from "../types/Wine";
-import { ChevronLeft } from "lucide-react";
-import { ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, DotSquare } from "lucide-react";
 import Autoplay from "embla-carousel-autoplay";
 
-export const ProductSlider: FC = () => {
+type RecommendationSliderProps = {
+  id: string | number;
+};
+
+export const RecommendationSlider: FC<RecommendationSliderProps> = ({ id }) => {
   const [products, setProducts] = useState<Wine[]>([]);
   const [loading, setLoading] = useState(true);
-  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: false }, [Autoplay()]);
+  const [emblaRef, emblaApi] = useEmblaCarousel(
+    { loop: false },
+    [Autoplay()]
+  );
 
   useEffect(() => {
-    if (emblaApi) {
-      console.log(emblaApi.slideNodes()); // Access API
-    }
-    fetch("http://localhost:8080/wines")
+    fetch(`http://localhost:8080/wines/${id}/recommendations`)
       .then((response) => response.json())
       .then((data) => {
-        setProducts(data.content);
+        setProducts(Array.isArray(data.content) ? data.content : []);
         setLoading(false);
+          console.log(data.content)
+
       })
-      .catch((error) => {
+      .catch(() => {
+        setProducts([]);
         setLoading(false);
       });
-  }, [emblaApi]);
+  }, [id]);
 
   const scrollPrev = useCallback(
     () => emblaApi && emblaApi.scrollPrev(),
@@ -36,9 +42,13 @@ export const ProductSlider: FC = () => {
   );
 
   if (loading) return <p>Завантаження...</p>;
+  if (!Array.isArray(products) || products.length === 0) return null;
 
   return (
-    <div className="mx-auto max-w-7xl">
+    <div className="my-12 mx-auto max-w-7xl">
+      <h2 className="text-[#250001] text-center text-3xl font-semibold mb-8">
+        Рекомендовані вина
+      </h2>
       <div className="embla">
         <div className="embla__viewport" ref={emblaRef}>
           <div className="embla__container">
@@ -54,14 +64,15 @@ export const ProductSlider: FC = () => {
             type="button"
             onClick={scrollPrev}
             className="py-3 px-3 rounded-full bg-white hover:bg-gray-300"
+            aria-label="Попередній"
           >
             <ChevronLeft />
           </button>
-
           <button
             type="button"
             onClick={scrollNext}
             className="px-3 py-3 rounded-full bg-white hover:bg-gray-300"
+            aria-label="Наступний"
           >
             <ChevronRight />
           </button>

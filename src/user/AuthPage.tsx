@@ -1,5 +1,5 @@
-import { useNavigate } from "react-router-dom";
-import { setUser } from "../store/slices/userSlice";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { removeUser, setUser } from "../store/slices/userSlice";
 import { useAppDispatch } from "../hooks/redux-hooks";
 import { useEffect, useState } from "react";
 import { AuthForm } from "../components/forms/AuthForm";
@@ -9,14 +9,18 @@ export const AuthPage = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const [error, setError] = useState("");
+  const [searchParams] = useSearchParams();
+  const redirect = searchParams.get("redirect");
 
-  useEffect(() => {
-    const userStr = localStorage.getItem("user");
-    if (userStr) {
-      const user = JSON.parse(userStr);
-      dispatch(setUser(user));
-    }
-  }, [dispatch]);
+ useEffect(() => {
+  const userStr = localStorage.getItem("user");
+  if (userStr) {
+    const user = JSON.parse(userStr);
+    dispatch(setUser(user));
+  } else {
+    dispatch(removeUser()); 
+  }
+}, [dispatch]);
 
   const handleLogin = async (
     email: string,
@@ -27,7 +31,8 @@ export const AuthPage = () => {
         email,
         password,
       });
-      const { token } = res.data;
+      const { token, role } = res.data;
+      console.log("Login response:", res.data);
 
       const meRes = await axios.get("http://localhost:8080/users/me", {
         headers: {
@@ -42,14 +47,22 @@ export const AuthPage = () => {
           name,
           email: userEmail,
           token,
+          role,
         })
       );
       localStorage.setItem(
         "user",
-        JSON.stringify({ id, name, email: userEmail, token })
+        JSON.stringify({ id, name, email: userEmail, token, role })
       );
+      console.log("User logged in:", { id, name, email: userEmail, role, token });
 
-      navigate("/account");
+      if (role === "ROLE_MANAGER") {
+        navigate("/admin");
+      } else if (redirect) {
+        navigate(redirect);
+      } else {
+        navigate("/account");
+      }
       return true;
     } catch (err: any) {
       console.error(err);

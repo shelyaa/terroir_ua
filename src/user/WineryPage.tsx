@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { FadeImage } from "../utils/FadeImage";
 
 export const WineryPage = () => {
   return (
@@ -6,11 +7,10 @@ export const WineryPage = () => {
       {/* Intro Section */}
       <div className="py-8 max-w-7xl mx-auto mb-10 flex flex-col lg:flex-row gap-20 items-center">
         <div className="w-full lg:w-[560px] flex justify-center">
-          <img
+          <FadeImage
             src="/photos/wine-bottle.jpg"
             alt="wine-bottle"
-            className="w-full h-auto max-w-[560px] object-contain"
-          />
+x          />
         </div>
         <div className="w-full lg:w-[512px] text-center lg:text-left">
           <h2 className="text-3xl font-semibold mb-4">Наші виноробні</h2>

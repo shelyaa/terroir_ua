@@ -14,4 +14,6 @@ export interface FiltersQuery {
   maxYear?: number;
   producers?: string[];
   name?: string;
+  page?: number;
+  size?: number;
 }
