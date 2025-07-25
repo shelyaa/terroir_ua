@@ -1,49 +1,24 @@
 import { useEffect, useState } from "react";
 import { Filters, FiltersQuery } from "../types/Filters";
 import { SelectableButton } from "./SelectableButton";
+import {
+  priceRangesOptions,
+  producerOptions,
+  typeOptions,
+  yearOptions,
+} from "../options/filterOptions";
 
- const typeOptions = [
-  "Червоне",
-  "Біле",
-  "Рожеве",
-  "Ігристе",
-  "Десертне",
-  "Портвейн",
-  "Апельсинове",
-];
-const priceRangesOptions = [
-  { label: "До 200 грн", min: 0, max: 200 },
-  { label: "200–400 грн", min: 200, max: 400 },
-  { label: "400–600 грн", min: 400, max: 600 },
-  { label: "600–1000 грн", min: 600, max: 1000 },
-  { label: "Понад 1000 грн", min: 1000, max: 50000 },
-];
-const yearOptions = [
-  { label: "До 2015", min: 0, max: 2014 },
-  { label: "2015–2019", min: 2015, max: 2019 },
-  { label: "2020", min: 2020, max: 2020 },
-  { label: "2021", min: 2021, max: 2021 },
-  { label: "2022", min: 2022, max: 2022 },
-  { label: "2023", min: 2023, max: 2023 },
-];
-const producerOptions = [
-  "Shabo",
-  "Колоніст",
-  "Biologist",
-  "Beykush Winery",
-  "Villa Tinta",
-  "Frumushika-Nova",
-  "46 Parallel Wine Group",
-  "Don Alejandro Winery",
-  "Father’s Wine",
-  "SliVino Village",
-];
+type FiltrationProps = {
+  searchParams: URLSearchParams;
+  setSearchParams: (searchParams: URLSearchParams) => void;
+  setIsFilterOpen: (isFiltetOpen: boolean) => void;
+};
 
 export const Filtration = ({
   searchParams,
   setSearchParams,
   setIsFilterOpen,
-}) => {
+}: FiltrationProps) => {
   const [filters, setFilters] = useState<Filters>({
     types: [],
     priceRanges: [],
@@ -227,7 +202,7 @@ export const Filtration = ({
   };
 
   return (
-    <div>
+    <div className="mx-4">
       <div className="my-4 ml-1 flex gap-4 items-baseline">
         <h2 className="text-3xl font-semibold ">Фільтри</h2>
         <button
@@ -238,7 +213,7 @@ export const Filtration = ({
         </button>
       </div>
 
-      <div className="grid grid-cols-2 *:mb-10 *:w-[450px]">
+      <div className="grid md:grid-cols-2 *:mb-10 *:max-w-[450px] grid-cols-1">
         <div>
           <div className="flex gap-4 items-baseline">
             <h3 className="text-2xl mb-6 font-medium ml-2">Тип вина</h3>
@@ -250,7 +225,7 @@ export const Filtration = ({
             </button>
           </div>
 
-          <div className="flex flex-wrap gap-4 w-[480px]">
+          <div className="flex flex-wrap gap-4 max-w-[480px]">
             {typeOptions.map((type) => (
               <SelectableButton
                 key={type}

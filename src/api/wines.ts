@@ -45,3 +45,11 @@ export const deleteWine = async (id: string, token: string | undefined) => {
   });
   return response.data;
 };
+
+export const getWineById = async (id: string): Promise<Wine> => {
+  const response = await axios.get<Wine>(
+    `http://localhost:8080/wines/${id}`
+  );
+
+  return response.data;
+};

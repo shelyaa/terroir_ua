@@ -6,7 +6,7 @@ const AboutSection = () => {
       <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center gap-12">
         <div className="w-full md:w-1/2 ">
           <img
-            src="/photos/wine-glass.jpg"
+            src="/home/wine-glass.jpg"
             alt="Вино та пейзаж"
             className="rounded-md shadow-md object-cover w-full"
           />

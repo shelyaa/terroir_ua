@@ -1,7 +1,7 @@
 
 export const AdminDashboard = () => {
   return (
-    <div>
+    <div className="">
      dashboard
     </div>
   );

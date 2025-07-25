@@ -1,10 +1,10 @@
-import { useState } from "react";
-import { Wine } from "../../types/Wine";
+import { useEffect, useState } from "react";
+import { Wine, wineType, wineTypeReverseMap } from "../../types/Wine";
 import { Label } from "../ui/label";
 import { FormInput } from "../ui/input";
 import { Button } from "../ui/button";
 import { Textarea } from "../ui/textarea";
-import { addProduct } from "../../api/products";
+import { addProduct, updateProduct } from "../../api/products";
 import { useAuth } from "../../hooks/use-auth";
 import { useNavigate } from "react-router-dom";
 
@@ -12,23 +12,68 @@ export function ProductForm({ product }: { product?: Wine | null }) {
   const { token } = useAuth();
   const navigate = useNavigate();
 
-  const [formData, setFormData] = useState({
-    name: product?.name || "",
-    producer: product?.producer || "Shabo",
-    agingMethod: product?.agingMethod || "",
-    region: product?.region || "",
-    sweetness: product?.sweetness || "",
-    price: product?.price || "",
-    description: product?.description || "",
-    percentage: product?.percentage || "",
-    year: product?.year || "",
-    volume: product?.volume || "",
-    type: product?.type || "Червоне",
-    variety: product?.variety || "",
-    ownerDescription: product?.ownerDescription || "",
-    rate: product?.rate || "", // default rate
-    dateAdded: product?.dateAdded || new Date().toISOString().slice(0, 19), // default current
+  type FormDataType = {
+    name: string;
+    producer: string;
+    agingMethod: string;
+    region: string;
+    sweetness: string;
+    price: string | number;
+    description: string;
+    percentage: string | number;
+    year: string | number;
+    volume: string | number;
+    type: string;
+    variety: string;
+    ownerDescription: string;
+    rate: string | number;
+    dateAdded: string;
+  };
+
+  const [formData, setFormData] = useState<FormDataType>({
+    name: "",
+    producer: "Shabo",
+    agingMethod: "",
+    region: "",
+    sweetness: "",
+    price: "",
+    description: "",
+    percentage: "",
+    year: "",
+    volume: "",
+    type: "Червоне",
+    variety: "",
+    ownerDescription: "",
+    rate: "",
+    dateAdded: new Date().toISOString().slice(0, 19),
   });
+
+  useEffect(() => {
+    if (product) {
+      setFormData({
+        name: product.name || "",
+        producer: product.producer || "Shabo",
+        agingMethod: product.agingMethod || "",
+        region: product.region || "",
+        sweetness: product.sweetness || "",
+        price: product.price || "",
+        description: product.description || "",
+        percentage: product.percentage || "",
+        year: product.year || "",
+        volume: product.volume || "",
+        type: wineType[product.type] || "Червоне",
+        variety: product.variety || "",
+        ownerDescription: product.ownerDescription || "",
+        rate: product.rate || "",
+        dateAdded:
+          typeof product.dateAdded === "string"
+            ? product.dateAdded
+            : product.dateAdded instanceof Date
+              ? product.dateAdded.toISOString().slice(0, 19)
+              : new Date().toISOString().slice(0, 19),
+      });
+    }
+  }, [product]);
 
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [error, setError] = useState<Record<string, string>>({});
@@ -72,7 +117,7 @@ export function ProductForm({ product }: { product?: Wine | null }) {
           ? formData.dateAdded
           : new Date().toISOString().slice(0, 19),
     };
-
+    console.log(payload);
     const fd = new FormData();
     fd.append(
       "wine",
@@ -81,18 +126,24 @@ export function ProductForm({ product }: { product?: Wine | null }) {
     if (imageFile) {
       fd.append("image", imageFile);
     }
+    let result;
+    if (product?.id) {
+      result = await updateProduct(product.id, fd, token ?? undefined);
+    } else {
+      result = await addProduct(fd, token ?? undefined);
+    }
 
-    const result = await addProduct(null, fd, token ?? undefined);
     if (result && typeof result === "object") {
-      setError(result);
+      setError(result as Record<string, string>);
     }
     setPending(false);
     console.log(imageFile);
-    navigate("/admin/products")
+
+    navigate("/admin/products");
   };
 
   return (
-    <div className=" mx-auto max-w-7xl">
+    <div className=" mx-auto max-w-7xl px-4">
       <form
         onSubmit={handleSubmit}
         className="space-y-4 grid grid-cols-2 gap-3"
@@ -273,9 +324,9 @@ export function ProductForm({ product }: { product?: Wine | null }) {
             />
             {product && (
               <img
-                src={product.imageUrl}
-                height="400"
-                width="400"
+                src={`http://localhost:8080` + product.imageUrl}
+                height="200"
+                width="200"
                 alt="Product Image"
               />
             )}

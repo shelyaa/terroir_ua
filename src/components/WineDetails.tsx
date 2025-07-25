@@ -7,6 +7,8 @@ import { Info } from "lucide-react";
 import { Loading } from "./ui/loading";
 import { useAddToCart } from "../hooks/useAddToCart";
 import { RecommendationSlider } from "./RecommendationSlider";
+import { WineDetailsSkeleton } from "./WineDetailsSceleton";
+import { getWineById } from "../api/wines";
 
 export const WineDetails = () => {
   const { id } = useParams();
@@ -16,61 +18,97 @@ export const WineDetails = () => {
   const [wine, setWine] = useState<Wine | null>(null);
   const [quantity, setQuantity] = useState(1);
 
-  const {addWine, loading} = useAddToCart();
-  
-  useEffect(() => {
-    const fetchWine = async () => {
-      const response = await fetch(`http://localhost:8080/wines/${id}`);
-      const data = await response.json();
-      setWine(data);
-    };
+  const { addWine, loading } = useAddToCart();
 
-    fetchWine();
+  useEffect(() => {
+    if (typeof id === "string") {
+      const fetchWine = async () => {
+        try {
+          await new Promise((resolve) => setTimeout(resolve, 300));
+          const data = await getWineById(id);
+          setWine(data);
+        } catch (e) {
+          setWine(null);
+        }
+      };
+      fetchWine();
+    } else {
+      setWine(null);
+    }
   }, [id]);
 
-  if (!wine)
-    return <div className="text-center text-xl mt-10">Завантаження...</div>;
+  if (!wine) return <WineDetailsSkeleton />;
 
   const handleClick = () => {
-  addWine(wine, quantity, {
-    onSuccess: () => {
-      setShowSuccessMessage(true);
-      setShowAuthMessage(false);
-      setCheckoutDisabled(false);
-    },
-    onAuthRedirect: () => {
-      setShowAuthMessage(true);
-      setCheckoutDisabled(true);
-    }
-  });
-};
-
+    addWine(wine, quantity, {
+      onSuccess: () => {
+        setShowSuccessMessage(true);
+        setShowAuthMessage(false);
+        setCheckoutDisabled(false);
+      },
+      onAuthRedirect: () => {
+        setShowAuthMessage(true);
+        setCheckoutDisabled(true);
+      },
+    });
+  };
 
   return (
-    <div className="max-w-6xl mx-auto px-6 py-8 font-manrope font-medium text-sm ">
+    <div className="max-w-6xl mx-auto px-2 sm:px-6 py-4 sm:py-8 font-manrope font-medium text-sm">
       <Link
         to="/wine"
-        className="flex items-center text-gray-500 hover:text-black mb-6"
+        className="flex items-center text-gray-500 hover:text-black mb-4 sm:mb-6"
       >
         <ChevronLeft className="mr-1" />
       </Link>
 
-      <div className="grid grid-cols-1 md:grid-cols-2">
-        <div className="space-y-6">
-          <h1 className="text-4xl font-bold font-cormorant">{wine.name}</h1>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+        {/* Image and rating block - on mobile comes first */}
+        <div className="flex flex-col items-center order-first md:order-last mb-2 md:mb-0">
+          <img
+            src={`http://localhost:8080${wine.imageUrl}`}
+            alt={wine.name}
+            className="w-full max-w-xs sm:w-90 "
+          />
+          <div className="mt-8 flex flex-col items-center w-full">
+            <div className="flex items-center gap-2 sm:gap-4 justify-center">
+              {Array.from({ length: 5 }).map((_, i) => (
+                <StarIcon
+                  fontSize="medium"
+                  key={i}
+                  className={
+                    i < Math.round(wine.rate)
+                      ? "text-yellow-500"
+                      : "text-gray-300"
+                  }
+                />
+              ))}
+              <p className="text-2xl sm:text-3xl font-medium font-cormorant ml-3 sm:ml-5">
+                {wine.rate}
+              </p>
+            </div>
+            <button className="border border-[#FCBA04] px-6 sm:px-30 py-2 text-xs font-bold bg-white mt-4 sm:mt-6 w-full sm:w-auto">
+              Залишити відгук
+            </button>
+          </div>
+        </div>
+        
+        {/* Wine details */}
+        <div className="space-y-4 sm:space-y-6 w-full">
+          <p className="text-2xl sm:text-4xl font-bold font-cormorant">{wine.name}</p>
 
-          <div className="flex items-center gap-25 text-xl text-red-900 font-cormorant">
+          <div className="flex flex-wrap items-center gap-4 sm:gap-25 text-lg sm:text-xl text-red-900 font-cormorant">
             <p>{wine.price} грн</p>
             <p>{wine.percentage}%</p>
             <p>{wine.volume} мл</p>
           </div>
 
-          <div className="w-50">
+          <div className="w-full max-w-xs">
             <p className="mb-2">Кількість</p>
-            <div className="flex items-center justify-between border">
+            <div className="flex items-center justify-between border rounded-md overflow-hidden">
               <button
                 onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                className="px-3 py-1 text-xl "
+                className="px-3 py-1 text-xl"
               >
                 –
               </button>
@@ -84,13 +122,13 @@ export const WineDetails = () => {
             </div>
           </div>
 
-          <p className="text-gray-700 text-justify w-100 ">
+          <p className="text-gray-700 text-justify w-full">
             <b>{wine.name}</b> — {wine.description.toLowerCase()}
           </p>
 
-          <div className="flex items-center gap-4 mt-4 w-[500px]">
+          <div className="flex items-center gap-2 sm:gap-4 mt-2 sm:mt-4 w-full">
             <button
-              className="px-30 py-2 bg-[#521b1a] text-white hover:bg-[#6b2a28] transition  font-semibold"
+              className="w-full sm:w-auto px-6 sm:px-30 py-2 bg-[#521b1a] text-white hover:bg-[#6b2a28] transition font-semibold"
               onClick={handleClick}
               disabled={checkoutDisabled}
             >
@@ -99,28 +137,28 @@ export const WineDetails = () => {
           </div>
 
           {showAuthMessage && (
-            <div className="text-[#2D6CDF] border-[#2D6CDF] border-1 flex gap-8 p-4 w-110">
-              <p className=" font-cormorant text-xl">
+            <div className="text-[#2D6CDF] border-[#2D6CDF] border-1 flex flex-col sm:flex-row gap-4 sm:gap-8 p-4 w-full sm:w-110">
+              <p className="font-cormorant text-lg sm:text-xl">
                 Щоб додати товар до кошика, увійдіть чи зареєструйтесь!
               </p>
               <Info strokeWidth={1.5} />
             </div>
           )}
           {showSuccessMessage && (
-            <div className="text-[#2D6CDF] border-[#2D6CDF] border-1 flex gap-8 p-4 w-90">
-              <a className="font-cormorant text-xl" href="/order">
+            <div className="text-[#2D6CDF] border-[#2D6CDF] border-1 flex flex-col sm:flex-row gap-4 sm:gap-8 p-4 w-full sm:w-90">
+              <a className="font-cormorant text-lg sm:text-xl" href="/order">
                 Товар успішно додано до кошика!
               </a>
             </div>
           )}
 
-          <div className="text-gray-700 text-sm mt-6 w-100 text-justify">
+          <div className="text-gray-700 text-sm mt-4 sm:mt-6 w-full text-justify">
             <h2 className="font-bold mb-1">Коментар від винороба:</h2>
-            <p className="">{wine.ownerDescription}</p>
+            <p>{wine.ownerDescription}</p>
           </div>
 
-          <div className="grid grid-cols-2 gap-x-8 gap-y-2 text-sm text-gray-800 mt-6">
-            <div className="*:mb-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-2 text-sm text-gray-800 mt-4 sm:mt-6">
+            <div className="*:mb-2 sm:*:mb-4">
               <p>
                 <span className="font-bold">Тип вина</span> <br />
                 {wineType[wine.type]}
@@ -140,7 +178,7 @@ export const WineDetails = () => {
                 {wine.variety}
               </p>
             </div>
-            <div className="*:mb-4">
+            <div className="*:mb-2 sm:*:mb-4">
               <p>
                 <span className="font-bold">Регіон виробництва</span>
                 <br />
@@ -159,41 +197,8 @@ export const WineDetails = () => {
             </div>
           </div>
         </div>
-
-        <div className="items-center flex flex-col">
-          <img
-            src={`http://localhost:8080` + wine.imageUrl}
-            alt={wine.name}
-            className="w-90 "
-          />
-          <div>
-            <div className="mt-20 flex flex-col items-center">
-              <div className="flex items-center gap-4 justify-center">
-                {Array.from({ length: 5 }).map((_, i) => (
-                  <StarIcon
-                    fontSize="large"
-                    key={i}
-                    className={
-                      i < Math.round(wine.rate)
-                        ? "text-yellow-500"
-                        : "text-gray-300"
-                    }
-                  />
-                ))}
-                <p className="text-3xl font-medium font-cormorant ml-5">
-                  {wine.rate}
-                </p>
-              </div>
-
-              <button className="border border-[#FCBA04] px-30 py-2 text-xs font-bold bg-white mt-6">
-                Залишити відгук
-              </button>
-            </div>
-          </div>
-        </div>
       </div>
-      <RecommendationSlider id={id}/>
+      <RecommendationSlider id={id} />
     </div>
   );
 };
- 

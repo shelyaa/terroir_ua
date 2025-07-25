@@ -9,13 +9,13 @@ export const ContactsPage = () => {
   const [text, setText] = useState("");
 
   return (
-    <div className="max-w-5xl mx-auto flex flex-row my-10 justify-between">
-      <div className="flex flex-col items-center">
+    <div className="max-w-5xl md:mx-auto flex md:flex-row flex-col my-10 justify-between mx-4">
+      <div className="flex flex-col items-center mb-8 mx-4">
         <h2 className="text-3xl font-semibold mb-2">Напиши нам тут</h2>
         <p className="font-manrope text-base font-medium text-light-gray mb-7">
           Ми з радістю вислухаємо ваші ідеї і прочитаємо коментарі
         </p>
-        <form action="" className="space-y-8 font-manrope w-[400px]">
+        <form action="" className="space-y-8 font-manrope md:w-[400px] w-80">
           <div className="space-y-2">
             <Label htmlFor="email" className="font-medium text-[#5A5A5A]">
               Введіть свою електронну адресу

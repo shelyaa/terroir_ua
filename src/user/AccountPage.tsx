@@ -6,7 +6,7 @@ export const AccountPage = () => {
   const { isAuth } = useAuth();
 
   return isAuth ? (
-    <div className="mx-auto py-12 max-w-7xl items-start">
+    <div className="mx-auto py-12 max-w-7xl items-start px-4">
       <h1 className="text-3xl font-semibold">Мій профіль</h1>
       <Account />
     </div>

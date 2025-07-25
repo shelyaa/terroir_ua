@@ -1,7 +1,7 @@
 import React from "react";
 
 interface Props {
-  selectedType: string;
+  searchParams: URLSearchParams;
   onSelectType: (type: string) => void;
 }
 
@@ -16,22 +16,24 @@ const wineTypes = [
   { label: "Апельсинові", value: "Апельсинове" },
 ];
 
-const FilterBar: React.FC<Props> = ({ selectedType, onSelectType }) => (
-  <div className="flex gap-20">
-    {wineTypes.map((type) => (
-      <button
-        key={type.value}
-        onClick={() => onSelectType(type.value)}
-        className={`py-2 text-xl  cursor-pointer hover:text-black ${
-          selectedType === type.value
-            ? "text-black font-semibold "
-            : "text-gray"
-        }`}
-      >
-        {type.label}
-      </button>
-    ))}
-  </div>
-);
+export const FilterBar: React.FC<Props> = ({ searchParams, onSelectType }) => {
+  const selectedType = searchParams.get("type") || "Усі";
 
-export default FilterBar;
+  return (
+    <div className="flex md:gap-20 flex-wrap justify-center gap-8">
+      {wineTypes.map((type) => (
+        <button
+          key={type.value}
+          onClick={() => onSelectType(type.value)}
+          className={`py-2 text-xl  cursor-pointer hover:text-black ${
+            selectedType === type.value
+              ? "text-black font-semibold "
+              : "text-gray"
+          }`}
+        >
+          {type.label}
+        </button>
+      ))}
+    </div>
+  );
+};

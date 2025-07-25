@@ -68,7 +68,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
 
         <div className="flex items-center gap-2 justify-end">
           <CardDescription>{wine.rate}</CardDescription>
-          <img src="src/assets/star.svg" alt="star" className="w-4 h-4" />
+          <img src="icons/star.svg" alt="star" className="w-4 h-4" />
         </div>
       </CardContent>
     </Card>

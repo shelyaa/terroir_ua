@@ -4,24 +4,21 @@ import { useAppDispatch, useAppSelector } from "../hooks/redux-hooks";
 import { ChevronLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { fetchCart } from "../api/fetchCart";
-import Cookies from "js-cookie";
 
-export const Cart = ({onCheckout}) => {
+export const Cart = ({ onCheckout }) => {
   const cartItems = useAppSelector((state) => state.cart.cartItems);
   const amount = useAppSelector((state) => state.cart.amount);
   const deliveryPrice = useAppSelector((state) => state.cart.deliveryPrice);
   const totalPrice = useAppSelector((state) => state.cart.totalPrice);
   const loading = useAppSelector((state) => state.cart.loading);
   const error = useAppSelector((state) => state.cart.error);
-  const userId = useAppSelector(state => state.user.id);
+  const userId = useAppSelector((state) => state.user.id);
   const dispatch = useAppDispatch();
   const [wines, setWines] = useState({});
   const navigate = useNavigate();
-  
 
   useEffect(() => {
     if (userId) {
-      Cookies.remove("cart");
       dispatch(fetchCart());
     }
   }, [userId, dispatch]);
@@ -40,17 +37,16 @@ export const Cart = ({onCheckout}) => {
       setWines(winesObj);
     });
   }, [cartItems]);
-
-  if (loading) {
-    return <div className="text-center p-10 text-xl">Завантаження корзини...</div>;
-  }
+  // if (loading && cartItems.length === 0) {
+  //   return <div>Завантаження корзини...</div>;
+  // }
 
   if (error) {
     return <div className="text-center text-red-600 p-10 text-xl">{error}</div>;
   }
 
   return (
-    <div className="max-w-7xl mx-auto">
+    <div className="max-w-7xl md:mx-auto mx-4">
       <div className="flex items-center gap-2 my-4">
         <button
           onClick={() => navigate(-1)}
@@ -70,20 +66,23 @@ export const Cart = ({onCheckout}) => {
             <CartItem key={item.id} item={item} wine={wines[item.wineId]} />
           ))}
 
-          <div className="flex flex-col w-full items-center">
-            <div className="flex flex-row justify-between w-full max-w-md mb-8">
+          <div className="flex flex-col w-full items-center mx-4">
+            <div className="flex flex-row justify-between w-full md:max-w-md mb-8 md:text-2xl text-xl max-w-2xs">
               <div className="flex flex-col gap-2">
-                <p className="text-2xl font-medium">Проміжний підсумок</p>
-                <p className="text-2xl font-medium">Доставка</p>
-                <p className="text-3xl font-semibold mt-2">Всього</p>
+                <p className="font-medium">Проміжний підсумок</p>
+                <p className="font-medium">Доставка</p>
+                <p className="font-semibold mt-2">Всього</p>
               </div>
               <div className="flex flex-col items-end gap-2">
-                <p className="text-2xl font-medium">{amount} грн</p>
-                <p className="text-2xl font-medium">{deliveryPrice} грн</p>
-                <p className="text-3xl font-semibold mt-2">{totalPrice} грн</p>
+                <p className="font-medium">{amount} грн</p>
+                <p className="font-medium">{deliveryPrice} грн</p>
+                <p className="font-semibold mt-2">{totalPrice} грн</p>
               </div>
             </div>
-            <button className="px-30 py-2 mb-6 bg-[#521b1a] text-white hover:bg-[#6b2a28] transition text-sm font-semibold font-manrope" onClick={onCheckout}>
+            <button
+              className="md:px-30 py-2 mb-6 bg-[#521b1a] text-white hover:bg-[#6b2a28] transition text-sm font-semibold font-manrope px-10"
+              onClick={onCheckout}
+            >
               Перейти до оплати
             </button>
           </div>

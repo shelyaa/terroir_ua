@@ -1,16 +1,14 @@
-import { useAppDispatch, useAppSelector } from "../hooks/redux-hooks";
-import { addToCart } from "../store/slices/cartSlice";
-import { addWineToCart } from "../api/cart";
-import { useAuth } from "../hooks/use-auth";
-import { useNavigate } from "react-router-dom";
 import { useState } from "react";
+import { addWineToCart } from "../api/addWineToCart";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "./use-auth";
+import { useAppDispatch } from "./redux-hooks";
 import { Wine } from "../types/Wine";
 
 export function useAddToCart() {
   const dispatch = useAppDispatch();
   const { isAuth } = useAuth();
   const navigate = useNavigate();
-  const token = useAppSelector((state) => state.user.token);
   const [loading, setLoading] = useState(false);
 
   const addWine = async (
@@ -22,30 +20,18 @@ export function useAddToCart() {
       onError?: (e: any) => void;
     }
   ) => {
-    setLoading(true);
-
-    dispatch(
-      addToCart({
-        id: wine.id + "-" + Date.now(),
-        wineId: wine.id,
-        price: wine.price,
-        quantity,
-      })
-    );
-
-      if (!isAuth) {
-      options?.onAuthRedirect?.(); // Показати повідомлення
-
+    if (!isAuth) {
+      options?.onAuthRedirect?.();
       setTimeout(() => {
-      setLoading(false);
-
+        setLoading(false);
         navigate(`/auth/?redirect=/order`);
-      }, 1000); // Почекати 2 сек перед редиректом
+      }, 1000);
       return;
     }
 
+    setLoading(true);
     try {
-      await addWineToCart(wine.id, quantity, token ?? "");
+      await dispatch(addWineToCart({ wineId: wine.id, quantity })).unwrap();
       setLoading(false);
       options?.onSuccess?.();
       navigate("/order");
@@ -54,6 +40,5 @@ export function useAddToCart() {
       options?.onError?.(e);
     }
   };
-
   return { addWine, loading };
 }

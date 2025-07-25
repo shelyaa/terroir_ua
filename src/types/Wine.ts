@@ -21,7 +21,7 @@ export type Wine = {
   variety: string;
 };
 
-export const wineType = {
+export const wineType: Record<string, string> = {
   RED: "Червоне",
   WHITE: "Біле",
   PINK: "Рожеве",
@@ -29,4 +29,14 @@ export const wineType = {
   DESSERT: "Десертне",
   PORTWEIN: "Портвейн",
   ORANGE: "Апельсинове",
+};
+
+export const wineTypeReverseMap: Record<string, string> = {
+  "Червоне": "RED",
+  "Біле": "WHITE",
+  "Рожеве": "PINK",
+  "Ігристе": "SPARKLING",
+  "Десертне": "DESSERT",
+  "Портвейн": "PORTWEIN",
+  "Апельсинове": "ORANGE",
 };

@@ -56,7 +56,7 @@ export const ProductsTable = () => {
 
   if (!isLoading && products.length === 0) return <p className="text-center font-medium text-2xl">Продуктів не знайдено</p>;
   return (
-    <div>
+    <div className="px-4">
       <Table className="mx-auto py-4 max-w-5xl">
         <TableHeader>
           <TableRow className="text-xl font-semibold">
@@ -81,7 +81,7 @@ export const ProductsTable = () => {
                   <DropdownMenuContent className="font-manrope font-medium">
                     <DropdownMenuItem asChild>
                       <Link to={`/admin/products/${product.id}/edit`}>
-                        Edit
+                        Редагувати
                       </Link>
                     </DropdownMenuItem>
 

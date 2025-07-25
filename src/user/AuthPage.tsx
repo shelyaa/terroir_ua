@@ -72,11 +72,11 @@ export const AuthPage = () => {
   };
 
   return (
-    <div className="mx-auto grid grid-cols-2 py-12 max-w-6xl items-start gap-5">
-      <div className="w-full">
-        <img src="/photos/grape.png" alt="grape-photo" className="w-180" />
+    <div className="mx-auto grid md:grid-cols-2 py-12 max-w-6xl items-start gap-5 grid-cols-1">
+      <div className="w-full hidden md:block">
+        <img src="/auth/grape.png" alt="grape-photo" className="w-180" />
       </div>
-      <div className="w-full">
+      <div className="w-full px-8">
         <h1 className="text-3xl font-semibold max-w-md mx-auto mb-6">
           Увійти в акаунт
         </h1>

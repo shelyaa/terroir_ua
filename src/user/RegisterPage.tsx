@@ -52,15 +52,15 @@ export const RegisterPage = () => {
     }
   };
   return (
-    <div className="mx-auto grid grid-cols-2 py-12 max-w-6xl items-start gap-5">
-      <div className="w-full flex justify-center items-center h-[500px]">
+    <div className="mx-auto grid md:grid-cols-2 grid-cols-1 py-12 max-w-6xl items-start gap-5">
+      <div className="w-full flex justify-center items-center h-[500px] md:block hidden">
         <img
-          src="/photos/wine-glasses.png"
+          src="/auth/wine-glasses.png"
           alt="wine-glasses"
-          className="max-h-full object-contain"
+          className="max-h-full object-contain "
         />
       </div>
-      <div className="w-full">
+      <div className="w-full px-8">
         <h1 className="text-3xl font-semibold max-w-md mx-auto mb-6">
           Реєстрація
         </h1>

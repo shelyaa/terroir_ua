@@ -1,18 +1,17 @@
 import { removeUser } from "../store/slices/userSlice";
 import { useAppDispatch, useAppSelector } from "../hooks/redux-hooks";
 
-export const Account = () => {
+export const AdminAccount = () => {
   const { email, name } = useAppSelector((state) => state.user);
 
   return (
-    <div className="mx-auto grid md:grid-cols-2 py-6 max-w-7xl items-start gap-5 grid-cols-1">
+    <div className="mx-auto grid md:grid-cols-2 grid-cols-1 py-6 max-w-7xl items-start gap-5">
       <div className="font-manrope mb-4 font-medium">
         <div className="mb-2">{name}</div>
+        <div className="mb-2">Адміністратор сайту</div>
         <div>{email}</div>
       </div>
       <ul className="[&_li]:text-xl font-medium w-75 [&_li]:mb-7 border-gray pl-3 [&_li]:pb-1">
-        <li className="border-b">Улюблене</li>
-        <li className="border-b">Історія переглядів</li>
         <li>
           <SettingsDropdown />
         </li>
@@ -46,18 +45,6 @@ export const SettingsDropdown = () => {
 
       {isOpen && (
         <div className="flex flex-col font-manrope text-sm">
-          <button
-            className="text-left py-2 border-b border-gray-300 hover:bg-gray-100"
-            type="button"
-          >
-            Редагувати дані профілю
-          </button>
-          <button
-            className="text-left py-2 border-b border-gray-300  hover:bg-gray-100"
-            type="button"
-          >
-            Методи оплати
-          </button>
           <button
             className="text-left py-2 border-b border-gray-300  hover:bg-gray-100 text-red-600"
             type="button"

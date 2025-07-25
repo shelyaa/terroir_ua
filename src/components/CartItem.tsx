@@ -1,36 +1,40 @@
-import { removeWineFromCart } from "../api/cart";
 import { useAppDispatch, useAppSelector } from "../hooks/redux-hooks";
-import { removeFromCart, updateQuantity } from "../store/slices/cartSlice";
+import { removeWineFromCart } from "../api/removeFromCart";
 import { wineType } from "../types/Wine";
+import { updateCartItem } from "../api/updateCartItem";
 
 export const CartItem = ({ item, wine }) => {
   const dispatch = useAppDispatch();
-  const token = useAppSelector((state) => state.user.token);
-  console.log("CartItem - item:", item);
-  console.log("CartItem - quantity type:", typeof item.quantity);
-  console.log("CartItem - quantity value:", item.quantity);
+  const loading = useAppSelector((state) => state.cart.loading);
+
   if (!wine) {
     return <div className="p-4">Завантаження товару...</div>;
   }
 
   const handleDecrement = () => {
     if (item.quantity > 1) {
-      dispatch(updateQuantity({ id: item.id, quantity: item.quantity - 1 }));
+      dispatch(
+        updateCartItem({ wineId: item.id, quantity: item.quantity - 1 })
+      );
     }
   };
 
   const handleIncrement = () => {
-    dispatch(updateQuantity({ id: item.id, quantity: item.quantity + 1 }));
+    dispatch(
+      updateCartItem({ wineId: item.id, quantity: item.quantity + 1 })
+    );
   };
+
   const handleClear = () => {
-    dispatch(removeFromCart(item.id));
-    removeWineFromCart(item.id, token ?? "");
+    console.log("Deleting wineId:", item.wineId, wine.id);
+  dispatch(removeWineFromCart(item.id));
   };
 
   return (
-    <div className="relative flex items-center w-full py-8 px-6 gap-12">
+    <div className="relative flex items-center w-full py-8 px-6 gap-12 flex-col md:flex-row">
       <button
         onClick={handleClear}
+        disabled={loading}
         className="absolute top-8 right-6 text-gray-500 hover:text-red-600 text-5xl"
         aria-label="Remove item"
         type="button"
@@ -40,7 +44,7 @@ export const CartItem = ({ item, wine }) => {
 
       <div className="w-70 flex-shrink-0 flex justify-center">
         <img
-          src={`http://localhost:8080` + wine.imageUrl}
+          src={`http://localhost:8080${wine.imageUrl}`}
           alt="Вино"
           className="h-70 object-contain"
         />
@@ -63,6 +67,7 @@ export const CartItem = ({ item, wine }) => {
               onClick={handleDecrement}
               className="flex-1 text-xl"
               type="button"
+              disabled={item.quantity <= 1 || loading}
             >
               –
             </button>
@@ -71,6 +76,7 @@ export const CartItem = ({ item, wine }) => {
               onClick={handleIncrement}
               className="flex-1 text-xl"
               type="button"
+              disabled={loading}
             >
               +
             </button>
@@ -78,7 +84,7 @@ export const CartItem = ({ item, wine }) => {
         </div>
       </div>
 
-      <div className="ml-25 min-w-[220px] grid grid-cols-2 gap-x-8 gap-y-4 text-lg">
+      <div className="ml-25 min-w-[220px] md:grid grid-cols-2 gap-x-8 gap-y-4 text-lg hidden">
         <div>
           <div className="font-semibold">Тип вина</div>
           <div className="text-gray-600">{wineType[wine.type]}</div>
