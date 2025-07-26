@@ -5,7 +5,6 @@ import { AuthPage } from "./user/AuthPage";
 import { RegisterPage } from "./user/RegisterPage";
 import { Provider, useDispatch } from "react-redux";
 import { store } from "./store";
-import "./firebase";
 import { AccountPage } from "./user/AccountPage";
 import { WinePage } from "./user/WinePage";
 import { WineDetailsPage } from "./user/WineDetailsPage";
@@ -25,6 +24,7 @@ import { PaymentSuccessPage } from "./user/PaymentSuccessPage";
 import { ScrollToTop } from "./utils/ScrollToTop";
 import { PaymentCancelPage } from "./user/PaymentCancelPage";
 import { AdminAccountPage } from "./admin/AdminAccount";
+import { MyOrdersPage } from "./user/MyOrdersPage";
 
 function AppWithUserInit() {
   const dispatch = useDispatch();
@@ -50,6 +50,7 @@ function AppWithUserInit() {
           <Route path="/auth" element={<AuthPage />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/account" element={<AccountPage />} />
+          <Route path="/account/my-orders" element={<MyOrdersPage />} />
           <Route path="/contacts" element={<ContactsPage />} />
           <Route
             path="/polityka-konfidentsiynosti"

@@ -11,8 +11,7 @@ export const Account = () => {
         <div>{email}</div>
       </div>
       <ul className="[&_li]:text-xl font-medium w-75 [&_li]:mb-7 border-gray pl-3 [&_li]:pb-1">
-        <li className="border-b">Улюблене</li>
-        <li className="border-b">Історія переглядів</li>
+        <Link to='/account/my-orders'><li className="border-b">Мої замовлення</li></Link>
         <li>
           <SettingsDropdown />
         </li>
@@ -23,6 +22,7 @@ export const Account = () => {
 
 import { useState } from "react";
 import { ChevronUp, ChevronDown } from "lucide-react";
+import { Link } from "react-router-dom";
 
 export const SettingsDropdown = () => {
   const [isOpen, setIsOpen] = useState(false);
