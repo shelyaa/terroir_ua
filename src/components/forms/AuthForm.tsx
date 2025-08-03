@@ -4,6 +4,7 @@ import { Button } from ".././ui/button";
 import { FcGoogle } from "react-icons/fc";
 import { Link } from "react-router-dom";
 import { FC, useState } from "react";
+import { GoogleLoginButton } from "./GoogleLoginButton";
 
 interface FormProps {
   handleClick: (email: string, pass: string) => Promise<boolean>;
@@ -15,13 +16,11 @@ export const AuthForm: FC<FormProps> = ({ handleClick, error, setError }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const success = await handleClick(email, password);
     if (success) {
       setError("");
-      
     }
   };
 
@@ -92,14 +91,9 @@ export const AuthForm: FC<FormProps> = ({ handleClick, error, setError }) => {
       </div>
 
       <div className="text-center text-muted-foreground">або</div>
-      <Button
-        variant="outline"
-        className="w-full flex items-center justify-center gap-2"
-      >
-        <FcGoogle size={20} />
-        Sign in with Google
-      </Button>
-
+      <div className="">
+        <GoogleLoginButton />
+      </div>
       <Button
         type="submit"
         className="w-full bg-red-900 hover:bg-red-800 text-white"

@@ -21,11 +21,10 @@ export const App = () => {
       dispatch(setUser(user));
       console.log("dispatch setUser:", user);
     }
-    setLoading(false); // Завжди після спроби зчитати user
+    setLoading(false); 
   }, [dispatch]);
 
-  // Не показуємо нічого, поки не завершили відновлення користувача
-  if (loading) return null; // або можна рендерити спінер
+  if (loading) return null; 
 
   return (
     <div className="relative">

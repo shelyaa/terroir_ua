@@ -1,7 +1,6 @@
 import React from "react";
 import { SquareCheck } from "lucide-react";
 
-// Тип фільтрів
 type FiltersQuery = {
   page?: number;
   types?: string[];
@@ -12,7 +11,6 @@ type FiltersQuery = {
   producers?: string[];
 };
 
-// Функція для форматування фільтрів для рендеру
 function getFiltersArray(params: FiltersQuery): React.ReactNode[] {
   const filters: React.ReactNode[] = [];
 

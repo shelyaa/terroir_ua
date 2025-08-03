@@ -26,6 +26,8 @@ export function useAddToCart() {
         setLoading(false);
         navigate(`/auth/?redirect=/order`);
       }, 1000);
+      await dispatch(addWineToCart({ wineId: wine.id, quantity })).unwrap();
+
       return;
     }
 

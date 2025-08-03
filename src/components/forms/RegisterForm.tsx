@@ -1,8 +1,8 @@
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
-import { FcGoogle } from "react-icons/fc";
 import { FC, useState } from "react";
+import { GoogleLoginButton } from "./GoogleLoginButton";
 
 interface FormProps {
   handleClick: (email: string, pass: string, name: string) => void;
@@ -15,7 +15,9 @@ export const RegisterForm: FC<FormProps> = ({ handleClick, error }) => {
   const [password, setPassword] = useState("");
   const [checkPassword, setCheckPassword] = useState("");
   const [registerError, setRegisterError] = useState("");
-  const [fieldError, setFieldError] = useState<null | "name" | "email" | "password" | "checkPassword">(null);
+  const [fieldError, setFieldError] = useState<
+    null | "name" | "email" | "password" | "checkPassword"
+  >(null);
 
   const isLongEnough = password.length >= 8;
   const isAlphaNumeric = /^[A-Za-z0-9]+$/.test(password);
@@ -42,7 +44,9 @@ export const RegisterForm: FC<FormProps> = ({ handleClick, error }) => {
     }
 
     if (!isLongEnough || !isAlphaNumeric) {
-      setRegisterError("Пароль має містити латинські літери та цифри і бути не менше 8 символів.");
+      setRegisterError(
+        "Пароль має містити латинські літери та цифри і бути не менше 8 символів."
+      );
       setFieldError("password");
       return;
     }
@@ -112,9 +116,7 @@ export const RegisterForm: FC<FormProps> = ({ handleClick, error }) => {
           required
           value={name}
           onChange={(e) => handleNameChange(e.target.value)}
-          className={
-            fieldError === "name" ? "border-red-600 bg-red-50" : ""
-          }
+          className={fieldError === "name" ? "border-red-600 bg-red-50" : ""}
         />
       </div>
 
@@ -130,9 +132,7 @@ export const RegisterForm: FC<FormProps> = ({ handleClick, error }) => {
           required
           value={email}
           onChange={(e) => handleEmailChange(e.target.value)}
-          className={
-            fieldError === "email" ? "border-red-600 bg-red-50" : ""
-          }
+          className={fieldError === "email" ? "border-red-600 bg-red-50" : ""}
         />
       </div>
 
@@ -148,7 +148,9 @@ export const RegisterForm: FC<FormProps> = ({ handleClick, error }) => {
           required
           value={password}
           onChange={(e) => handlePasswordChange(e.target.value)}
-          className={fieldError === "password" ? "border-red-600 bg-red-50" : ""}
+          className={
+            fieldError === "password" ? "border-red-600 bg-red-50" : ""
+          }
         />
         {!!password.length && (
           <div className="text-sm space-y-1">
@@ -174,7 +176,9 @@ export const RegisterForm: FC<FormProps> = ({ handleClick, error }) => {
           required
           value={checkPassword}
           onChange={(e) => handleCheckPasswordChange(e.target.value)}
-          className={fieldError === "checkPassword" ? "border-red-600 bg-red-50" : ""}
+          className={
+            fieldError === "checkPassword" ? "border-red-600 bg-red-50" : ""
+          }
         />
       </div>
 
@@ -190,14 +194,7 @@ export const RegisterForm: FC<FormProps> = ({ handleClick, error }) => {
 
       <div className="text-center">або</div>
 
-      <Button
-        variant="outline"
-        className="w-full flex items-center justify-center gap-2"
-        type="button"
-      >
-        <FcGoogle size={20} />
-        Sign in with Google
-      </Button>
+      <GoogleLoginButton />
 
       <Button
         type="submit"

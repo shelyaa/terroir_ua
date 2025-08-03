@@ -59,7 +59,7 @@ export const AuthPage = () => {
       if (role === "ROLE_MANAGER") {
         navigate("/admin");
       } else if (redirect) {
-        navigate(redirect);
+        navigate(redirect); 
       } else {
         navigate("/account");
       }
