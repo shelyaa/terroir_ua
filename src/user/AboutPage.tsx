@@ -3,17 +3,17 @@ import { FadeImage } from "../utils/FadeImage";
 export const AboutPage = () => {
   return (
     <div className="">
-      <div className="max-h-[491px] mb-20">
+      <div className="max-h-[640px] mb-20">
         <FadeImage src="/about/about-1.jpg" alt="about1" />
       </div>
       <div className="mb-20 flex flex-col lg:flex-row gap-5 items-center max-w-7xl md:mx-auto mx-4">
-        <div className="md:w-[560px] flex justify-center w-50">
+        <div className="w-full lg:w-1/2 flex justify-center">
           <FadeImage
             src="/about/about-2.jpg"
             alt="wine-bottle"
           />
         </div>
-        <div className="w-full lg:w-[512px] text-center lg:text-left">
+        <div className="w-full lg:w-1/2 text-center lg:text-left">
           <h2 className="text-3xl font-semibold mb-4">Наша місія</h2>
           <p className="font-manrope text-base font-normal">
             Показати Україну винного походження, підтримати малих і середніх

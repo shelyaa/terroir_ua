@@ -69,6 +69,7 @@ function AppWithUserInit() {
         <Route path="/admin" element={<AdminLayout />}>
           <Route index element={<AdminDashboard />} />
           <Route path="account" element={<AdminAccountPage />} />
+          <Route path="wine" element={<WinePage />} />
           <Route path="products" element={<AdminProductsPage />} />
           <Route path="products/new" element={<CreateWinePage />} />
           <Route path="products/:id/edit" element={<CreateWinePage />} />

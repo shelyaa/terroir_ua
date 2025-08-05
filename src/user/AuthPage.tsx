@@ -57,7 +57,7 @@ export const AuthPage = () => {
       console.log("User logged in:", { id, name, email: userEmail, role, token });
 
       if (role === "ROLE_MANAGER") {
-        navigate("/admin");
+        navigate("/admin/products");
       } else if (redirect) {
         navigate(redirect); 
       } else {

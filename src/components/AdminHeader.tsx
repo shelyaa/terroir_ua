@@ -26,7 +26,7 @@ export const AdminHeader = () => {
             <ul className="flex gap-5 text-xl text-[#5A5A5A] font-medium">
               <li>
                 <Link
-                  to="/wine"
+                  to="/admin/wine"
                   className={`${getPageClass("/wine", isActive)}`}
                 >
                   Вина
