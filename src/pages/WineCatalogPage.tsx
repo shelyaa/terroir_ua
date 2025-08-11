@@ -174,6 +174,7 @@ export const WineCatalogPage = () => {
           Пропозиції місяця
         </h1>
         <WineSlider />
+        
       </div>
     </div>
   );

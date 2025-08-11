@@ -21,9 +21,9 @@ export const RecommendationSlider: FC<RecommendationSliderProps> = ({ id }) => {
     fetch(`http://localhost:8080/wines/${id}/recommendations`)
       .then((response) => response.json())
       .then((data) => {
-        setProducts(Array.isArray(data.content) ? data.content : []);
+        setProducts(Array.isArray(data) ? data : []);
         setLoading(false);
-          console.log(data.content)
+          console.log(data)
 
       })
       .catch(() => {

@@ -1,25 +1,20 @@
 import { useEffect, useState } from "react";
-import { useAuth } from "../hooks/useAuth";   // хук для токену користувача
+import { useAuth } from "../hooks/useAuth";  
 import { Link } from "react-router-dom";
-import { getUserOrders } from "../api/order";
+import { getOrderItems, getUserOrders } from "../api/order";
+import { Wine } from "../types/Wine";
 
 type Order = {
   id: number;
   createdAt: string;
-  total: number;
-  status: string;
-  items: {
-    id: number;
-    name: string;
-    price: number;
-    quantity: number;
-    imageUrl: string;
-  }[];
+  totalPrice: number;
+  
 };
 
 export const MyOrdersPage = () => {
   const { token } = useAuth();
   const [orders, setOrders] = useState<Order[]>([]);
+  const [items, setItems] = useState<Wine[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -27,38 +22,34 @@ export const MyOrdersPage = () => {
       if (!token) return;
       setLoading(true);
       const data = await getUserOrders(token);
-      if (data) setOrders(data);
+      if (data) setOrders(data.content);
+      console.log(data.content)
       setLoading(false);
     };
     fetchOrders();
   }, [token]);
 
-  if (loading) return <div className="text-center py-10">Завантаження...</div>;
+
+  
+
+  if (loading) return <div className="text-center py-30">Завантаження...</div>;
 
   if (!orders.length)
-    return <div className="text-center py-10 text-gray-500">У вас ще немає замовлень.</div>;
+    return <div className="text-center py-30 text-2xl">У вас ще немає замовлень.</div>;
 
   return (
     <div className="max-w-3xl mx-auto px-4 py-8">
-      <h1 className="text-2xl font-bold mb-6">Мої замовлення</h1>
+      <h1 className="text-3xl font-bold mb-6">Мої замовлення</h1>
       <div className="space-y-8">
         {orders.map((order) => (
           <div key={order.id} className="border rounded-lg p-4 shadow-sm bg-white">
             <div className="flex justify-between items-center mb-2">
               <div>
                 <span className="font-semibold">Замовлення №{order.id}</span>
-                <span className="ml-4 text-gray-500 text-sm">{new Date(order.createdAt).toLocaleString("uk-UA")}</span>
               </div>
-              <div className={`px-3 py-1 text-xs rounded-full 
-                ${order.status === "COMPLETED" ? "bg-green-100 text-green-700" : 
-                  order.status === "CANCELLED" ? "bg-red-100 text-red-700" : 
-                  "bg-yellow-100 text-yellow-700"}`}>
-                {order.status === "COMPLETED" && "Завершено"}
-                {order.status === "CANCELLED" && "Скасовано"}
-                {order.status !== "COMPLETED" && order.status !== "CANCELLED" && "В обробці"}
-              </div>
+              
             </div>
-            <div className="divide-y">
+            {/* <div className="divide-y">
               {order.items.map((item) => (
                 <div key={item.id} className="flex items-center gap-4 py-3">
                   <img src={`http://localhost:8080${item.imageUrl}`} alt={item.name} className="w-16 h-16 object-cover rounded" />
@@ -69,13 +60,13 @@ export const MyOrdersPage = () => {
                   <div className="font-semibold">{item.price} грн</div>
                 </div>
               ))}
-            </div>
+            </div> */}
             <div className="flex justify-end mt-2 text-lg font-bold">
-              Всього: {order.total} грн
+              Всього: {order.totalPrice} грн
             </div>
-            <div className="mt-2 text-right">
+            {/* <div className="mt-2 text-right">
               <Link to={`/order/${order.id}`} className="text-blue-600 hover:underline text-sm">Детальніше</Link>
-            </div>
+            </div> */}
           </div>
         ))}
       </div>

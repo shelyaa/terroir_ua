@@ -32,3 +32,19 @@ export const getUserOrders = async (token: string) => {
     return null;
   }
 };
+
+export const getOrderItems = async (id: string, token: string) => {
+  try {
+    const response = await axios.get(`http://localhost:8080/orders/${id}/items`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (err: any) {
+    alert("Помилка: " + (err?.response?.data?.message || err.message));
+    return null;
+  }
+};
+
+

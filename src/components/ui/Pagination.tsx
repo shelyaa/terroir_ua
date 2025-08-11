@@ -7,7 +7,7 @@ interface Props {
 
 const PaginationRounded = ({ page, totalPages, onChange }: Props) => {
   return (
-    page >= 1 && (
+    totalPages > 1 && (
       <div className="flex gap-2 font-manrope text-sm font-medium">
         <button
           onClick={() => onChange(Math.max(page - 1, 0))}
