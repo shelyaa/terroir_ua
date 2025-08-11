@@ -5,7 +5,7 @@ export const createOrder = async (payload: any, token: string) => {
     const response = await axios.post("http://localhost:8080/orders", payload, {
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`, // додаємо токен тут
+        Authorization: `Bearer ${token}`, 
       },
     });
     const data = response.data;

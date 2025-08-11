@@ -1,4 +1,5 @@
-import { Types } from "./Types";
+
+export type Types = "RED" | "WHITE" | "PINK" | "SPARKLING" | "DESSERT" | "PORTWEIN" | "ORANGE";
 
 export type Wine = {
   volume: number;

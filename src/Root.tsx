@@ -1,30 +1,30 @@
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { App } from "./App";
-import { HomePage } from "./user/HomePage";
-import { AuthPage } from "./user/AuthPage";
-import { RegisterPage } from "./user/RegisterPage";
+import { HomePage } from "./pages/HomePage";
+import { LoginPage } from "./pages/LoginPage";
+import { RegisterPage } from "./pages/RegisterPage";
 import { Provider, useDispatch } from "react-redux";
 import { store } from "./store";
-import { AccountPage } from "./user/AccountPage";
-import { WinePage } from "./user/WinePage";
-import { WineDetailsPage } from "./user/WineDetailsPage";
-import { WineryPage } from "./user/WineryPage";
-import { AboutPage } from "./user/AboutPage";
-import { ContactsPage } from "./user/ContactsPage";
-import { PrivacyPolicyPage } from "./user/PrivacyPolicyPage";
-import { HelpPage } from "./user/HelpPage";
-import { PurchasePage } from "./user/PurchasePage";
-import { AdminLayout } from "./admin/AdminLayout";
-import { AdminProductsPage } from "./admin/AdminProductsPage";
-import { AdminDashboard } from "./admin/AdminDashboard";
+import { ProfilePage } from "./pages/ProfilePage";
+import { WineCatalogPage } from "./pages/WineCatalogPage";
+import { WineDetailsPage } from "./pages/WineDetailsPage";
+import { WineryPage } from "./pages/WineryPage";
+import { AboutPage } from "./pages/AboutPage";
+import { ContactPage } from "./pages/ContactPage";
+import { PrivacyPolicyPage } from "./pages/PrivacyPolicyPage";
+import { SupportPage } from "./pages/SupportPage";
+import { CheckoutPage } from "./pages/CheckoutPage";
+import { WineManagementPage } from "./pages/admin/WineManagementPage";
+import { AdminDashboard } from "./pages/admin/AdminDashboard";
 import { useEffect } from "react";
 import { setUser, removeUser } from "./store/slices/userSlice";
-import { CreateWinePage } from "./admin/CreateWinePage";
-import { PaymentSuccessPage } from "./user/PaymentSuccessPage";
-import { ScrollToTop } from "./utils/ScrollToTop";
-import { PaymentCancelPage } from "./user/PaymentCancelPage";
-import { AdminAccountPage } from "./admin/AdminAccount";
-import { MyOrdersPage } from "./user/MyOrdersPage";
+import { CreateWinePage } from "./pages/admin/CreateWinePage";
+import { PaymentSuccessPage } from "./pages/PaymentSuccessPage";
+import { ScrollToTop } from "./components/ui/ScrollToTop";
+import { PaymentCancelPage } from "./pages/PaymentCancelPage";
+import { AdminProfilePage } from "./pages/admin/AdminProfilePage";
+import { MyOrdersPage } from "./pages/MyOrdersPage";
+import { AdminLayout } from "./components/layout/admin/AdminLayout";
 
 function AppWithUserInit() {
   const dispatch = useDispatch();
@@ -47,18 +47,18 @@ function AppWithUserInit() {
         <Route path="/" element={<App />}>
           <Route index element={<HomePage />} />
           <Route path="/home" element={<Navigate to="/" replace />} />
-          <Route path="/auth" element={<AuthPage />} />
+          <Route path="/auth" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
-          <Route path="/account" element={<AccountPage />} />
+          <Route path="/account" element={<ProfilePage />} />
           <Route path="/account/my-orders" element={<MyOrdersPage />} />
-          <Route path="/contacts" element={<ContactsPage />} />
+          <Route path="/contacts" element={<ContactPage />} />
           <Route
             path="/polityka-konfidentsiynosti"
             element={<PrivacyPolicyPage />}
           />
-          <Route path="/help" element={<HelpPage />} />
-          <Route path="/order" element={<PurchasePage />} />
-          <Route path="/wine" element={<WinePage />} />
+          <Route path="/help" element={<SupportPage />} />
+          <Route path="/order" element={<CheckoutPage />} />
+          <Route path="/wine" element={<WineCatalogPage />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="/winery" element={<WineryPage />} />
           <Route path="/payments/success" element={<PaymentSuccessPage />} />
@@ -68,9 +68,9 @@ function AppWithUserInit() {
         </Route>
         <Route path="/admin" element={<AdminLayout />}>
           <Route index element={<AdminDashboard />} />
-          <Route path="account" element={<AdminAccountPage />} />
-          <Route path="wine" element={<WinePage />} />
-          <Route path="products" element={<AdminProductsPage />} />
+          <Route path="account" element={<AdminProfilePage />} />
+          <Route path="wine" element={<WineCatalogPage />} />
+          <Route path="products" element={<WineManagementPage />} />
           <Route path="products/new" element={<CreateWinePage />} />
           <Route path="products/:id/edit" element={<CreateWinePage />} />
         </Route>

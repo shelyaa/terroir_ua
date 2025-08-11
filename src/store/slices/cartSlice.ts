@@ -1,9 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { fetchCart } from "../../api/fetchCart";
-import { addWineToCart } from "../../api/addWineToCart";
-import { removeWineFromCart } from "../../api/removeFromCart";
-import { updateCartItem } from "../../api/updateCartItem";
-import { CartState } from "../../types/cart";
+import { addWineToCart, removeWineFromCart, updateCartItem } from "../../api/cart";
+import { CartState } from "../../types/Cart";
 
 const initialState: CartState = {
   cartItems: [],
@@ -96,7 +94,6 @@ const cartSlice = createSlice({
         state.loading = false;
         state.error = (action.payload as string) || "Не вдалося додати у кошик";
       })
-      // removeWineFromCart
       .addCase(removeWineFromCart.pending, (state) => {
         state.loading = true;
         state.error = null;

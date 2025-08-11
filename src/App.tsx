@@ -1,10 +1,10 @@
 import { Outlet } from "react-router-dom";
 import "./App.css";
-import { Footer } from "./components/Footer";
-import { Header } from "./components/Header";
+import { Footer } from "./components/layout/Footer";
+import { Header } from "./components/layout/Header";
 import { useEffect, useState } from "react";
-import { SearchBar } from "./components/SearchBar";
-import { useAppDispatch } from "./hooks/redux-hooks";
+import { SearchBar } from "./components/features/filtration/SearchBar";
+import { useAppDispatch } from "./hooks/redux";
 import { setUser } from "./store/slices/userSlice";
 
 export const App = () => {
