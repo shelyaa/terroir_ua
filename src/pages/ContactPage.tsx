@@ -3,10 +3,30 @@ import { Label } from "../components/ui/label";
 import { Input } from "../components/ui/input";
 import { Button } from "../components/ui/button";
 import { Link } from "react-router-dom";
+import { addComment } from "../api/contact";
+import { Textarea } from "../components/ui/textarea";
 
 export const ContactPage = () => {
   const [email, setEmail] = useState("");
-  const [text, setText] = useState("");
+  const [message, setMessage] = useState("");
+  const [success, setSuccess] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError(null);
+    setSuccess(false);
+
+    try {
+      await addComment({ email, message });
+      setSuccess(true);
+      setEmail("");
+      setMessage("");
+    } catch (error) {
+      setError("Виникла помилка при надсиланні. Спробуйте ще раз.");
+      setSuccess(false);
+    }
+  };
 
   return (
     <div className="max-w-5xl md:mx-auto flex md:flex-row flex-col my-10 justify-between mx-4">
@@ -15,7 +35,10 @@ export const ContactPage = () => {
         <p className="font-manrope text-base font-medium text-light-gray mb-7">
           Ми з радістю вислухаємо ваші ідеї і прочитаємо коментарі
         </p>
-        <form action="" className="space-y-8 font-manrope md:w-[400px] w-80">
+        <form
+          onSubmit={handleSubmit}
+          className="space-y-8 font-manrope md:w-[400px] w-80"
+        >
           <div className="space-y-2">
             <Label htmlFor="email" className="font-medium text-[#5A5A5A]">
               Введіть свою електронну адресу
@@ -23,7 +46,8 @@ export const ContactPage = () => {
             <Input
               id="email"
               name="email"
-              type="text"
+              type="email"
+              required
               placeholder="example@gmail.com"
               onChange={(e) => setEmail(e.target.value)}
               value={email}
@@ -33,13 +57,14 @@ export const ContactPage = () => {
             <Label htmlFor="name" className="font-medium text-[#5A5A5A]">
               Напишіть повідомлення
             </Label>
-            <Input
-              id="name"
-              name="name"
-              type="text"
+            <Textarea
+              id="message"
+              name="message"
+              required
               placeholder="Введіть текст тут"
-              onChange={(e) => setText(e.target.value)}
-              value={text}
+              onChange={(e) => setMessage(e.target.value)}
+              value={message}
+              className="placeholder:text-sm rounded-none border-0 border-b-1 border-gray-400"
             />
           </div>
           <Button
@@ -48,15 +73,26 @@ export const ContactPage = () => {
           >
             Надіслати
           </Button>
+          {success && (
+            <div className="text-sm text-gray">Коментар успішно надіслано!</div>
+          )}
+          {error && <div className="text-sm text-red-600">{error}</div>}
         </form>
       </div>
       <div className="flex flex-col text-center text-[#5A5A5A] gap-1 font-manrope justify-center items-end">
         <div className="grid grid-cols-1 gap-y-3 text text-right font-[400] ">
-          <a href="malito:info@terroir.ua" className="whitespace-nowrap text-red-900  font-cormorant text-2xl">info@terroir.ua</a>
+          <a
+            href="mailto:info@terroir.ua"
+            className="whitespace-nowrap text-red-900  font-cormorant text-2xl"
+          >
+            info@terroir.ua
+          </a>
           <Link to="/">GitHub</Link>
           <Link to="/help">FAQ / Допомога</Link>
-          <Link to="/polityka-konfidentsiynosti">Політика конфіденційності</Link>
-          </div>
+          <Link to="/polityka-konfidentsiynosti">
+            Політика конфіденційності
+          </Link>
+        </div>
       </div>
     </div>
   );

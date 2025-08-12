@@ -4,7 +4,6 @@ import { useAuth } from "./useAuth";
 import { useAppDispatch } from "./redux";
 import { Wine } from "../types/Wine";
 import { addWineToCart } from "../api/cart";
-import { fetchCart } from "../api/fetchCart";
 
 export function useCart() {
   const dispatch = useAppDispatch();
@@ -18,7 +17,7 @@ export function useCart() {
     options?: {
       onSuccess?: () => void;
       onAuthRedirect?: () => void;
-      onError?: (e: any) => void;
+      onError?: (e: unknown) => void;
     }
   ) => {
     if (!isAuth) {
@@ -39,7 +38,6 @@ export function useCart() {
       setLoading(false);
 
       options?.onSuccess?.();
-      navigate("/order");
     } catch (e) {
       setLoading(false);
       options?.onError?.(e);

@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 
 interface Props {
   page: number;
@@ -6,6 +7,10 @@ interface Props {
 }
 
 const PaginationRounded = ({ page, totalPages, onChange }: Props) => {
+  useEffect(() => {
+   window.scrollTo({ top: 0, behavior: "smooth" })
+  }, [page])
+  
   return (
     totalPages > 1 && (
       <div className="flex gap-2 font-manrope text-sm font-medium">

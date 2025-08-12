@@ -1,12 +1,12 @@
 import { FC, useState } from "react";
 import logo from "/logo/logo.png";
 import { Link, useLocation } from "react-router-dom";
-import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
 import SearchIcon from "@mui/icons-material/Search";
 import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
 import { useAuth } from "../../hooks/useAuth";
 import { getIconClass, getPageClass } from "../../utils/navigationStyles";
 import { Menu, X } from "lucide-react";
+import { CartLink } from "../features/cart/CartLink";
 
 type HeaderProps = {
   isSearchOpen: boolean;
@@ -74,7 +74,6 @@ export const Header: FC<HeaderProps> = ({ onOpenSearch, isSearchOpen }) => {
           <button
             onClick={() => {
               onOpenSearch(!isSearchOpen);
-              // navigate("/wine");
             }}
             aria-label="Пошук"
             className={` p-2 rounded-full transition duration-200 w-10 h-10 flex items-center justify-center hover:text-black ${isSearchOpen ? "border-1 border-[#590004] text-[#590004] bg-white" : ""} `}
@@ -89,13 +88,7 @@ export const Header: FC<HeaderProps> = ({ onOpenSearch, isSearchOpen }) => {
             <PersonOutlineOutlinedIcon />
           </Link>
 
-          <Link
-            to="/order"
-            aria-label="Кошик"
-            className={`${getIconClass("/order", isActive)}`}
-          >
-            <ShoppingCartOutlinedIcon />
-          </Link>
+          <CartLink isActive={isActive}/>
           <button
             className="md:hidden"
             onClick={() => setMenuOpen(!menuOpen)}
@@ -112,13 +105,22 @@ export const Header: FC<HeaderProps> = ({ onOpenSearch, isSearchOpen }) => {
 
       {menuOpen && (
         <div className="md:hidden flex flex-col  shadow-md py-4 font-medium  text-xl text-gray-600 w-full px-4  ">
-          <Link to="/wine" className={`${getPageClass("/wine", isActive)} justify-start`}>
+          <Link
+            to="/wine"
+            className={`${getPageClass("/wine", isActive)} justify-start`}
+          >
             Вина
           </Link>
-          <Link className={`${getPageClass("/winery", isActive)} justify-start`} to="/winery">
+          <Link
+            className={`${getPageClass("/winery", isActive)} justify-start`}
+            to="/winery"
+          >
             Виноробні
           </Link>
-          <Link className={`${getPageClass("/about", isActive)} justify-start`} to="/about">
+          <Link
+            className={`${getPageClass("/about", isActive)} justify-start`}
+            to="/about"
+          >
             Про нас
           </Link>
           <Link

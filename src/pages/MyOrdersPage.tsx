@@ -1,72 +1,130 @@
 import { useEffect, useState } from "react";
-import { useAuth } from "../hooks/useAuth";  
-import { Link } from "react-router-dom";
+import { useAuth } from "../hooks/useAuth";
 import { getOrderItems, getUserOrders } from "../api/order";
 import { Wine } from "../types/Wine";
+import { getWineById } from "../api/wines";
 
 type Order = {
   id: number;
   createdAt: string;
   totalPrice: number;
-  
+  items?: (Wine & {
+    quantity: number;
+    pricePerUnit: number;
+    wineId?: number;
+  })[];
 };
 
 export const MyOrdersPage = () => {
   const { token } = useAuth();
   const [orders, setOrders] = useState<Order[]>([]);
-  const [items, setItems] = useState<Wine[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchOrders = async () => {
       if (!token) return;
       setLoading(true);
+
       const data = await getUserOrders(token);
-      if (data) setOrders(data.content);
-      console.log(data.content)
+      if (data) {
+        const ordersData = data.content;
+
+        const ordersWithItems = await Promise.all(
+          ordersData.map(async (order: Order) => {
+            const itemsData = await getOrderItems(order.id.toString(), token);
+
+            const itemsWithDetails = await Promise.all(
+              (itemsData?.content || []).map(async (item) => {
+                try {
+                  const wineDetails = await getWineById(item.wineId);
+                  if (wineDetails) {
+                    return { ...item, ...wineDetails };
+                  }
+                } catch {
+                  return {
+                    ...item,
+                    name: "Вино видалено",
+                    imageUrl: "/about/about-2.jpg",
+                    isDeleted: true,
+                  };
+                }
+                console.log(item.imageUrl);
+              })
+            );
+
+            return {
+              ...order,
+              items: itemsWithDetails,
+            };
+          })
+        );
+
+        setOrders(ordersWithItems);
+      }
+
       setLoading(false);
     };
+
     fetchOrders();
   }, [token]);
-
-
-  
 
   if (loading) return <div className="text-center py-30">Завантаження...</div>;
 
   if (!orders.length)
-    return <div className="text-center py-30 text-2xl">У вас ще немає замовлень.</div>;
+    return (
+      <div className="text-center py-30 text-2xl">
+        У вас ще немає замовлень.
+      </div>
+    );
 
   return (
     <div className="max-w-3xl mx-auto px-4 py-8">
       <h1 className="text-3xl font-bold mb-6">Мої замовлення</h1>
       <div className="space-y-8">
         {orders.map((order) => (
-          <div key={order.id} className="border rounded-lg p-4 shadow-sm bg-white">
+          <div
+            key={order.id}
+            className="border rounded-lg p-4 shadow-sm bg-white px-8"
+          >
             <div className="flex justify-between items-center mb-2">
               <div>
-                <span className="font-semibold">Замовлення №{order.id}</span>
+                <span className="font-semibold text-2xl">Замовлення №{order.id}</span>
               </div>
-              
             </div>
-            {/* <div className="divide-y">
-              {order.items.map((item) => (
-                <div key={item.id} className="flex items-center gap-4 py-3">
-                  <img src={`http://localhost:8080${item.imageUrl}`} alt={item.name} className="w-16 h-16 object-cover rounded" />
+
+            <div className="divide-y">
+              {order.items?.map((item) => (
+                <div
+                  key={item.wineId || item.id}
+                  className="flex items-center gap-4 py-3 text-xl"
+                >
+                  <img
+                    src={
+                      item.imageUrl?.startsWith("http")
+                        ? item.imageUrl
+                        : `http://localhost:8080${item.imageUrl}`
+                    }
+                    alt={item.name}
+                    className={`w-32 h-40 object-cover rounded ${item.isDeleted ? "opacity-50 grayscale" : ""}`}
+                  />
                   <div className="flex-1">
-                    <div className="font-medium">{item.name}</div>
-                    <div className="text-sm text-gray-500">x{item.quantity}</div>
+                    <div
+                      className={`font-medium ${item.isDeleted ? "text-gray-400 italic" : ""}`}
+                    >
+                      {item.name}
+                    </div>
+                    <div className=" text-gray-500">
+                      x {item.quantity}
+                    </div>
                   </div>
-                  <div className="font-semibold">{item.price} грн</div>
+                  <div className="font-semibold ">{item.pricePerUnit} грн</div>
                 </div>
               ))}
-            </div> */}
-            <div className="flex justify-end mt-2 text-lg font-bold">
+            </div>
+
+            <div className="flex mt-2 text-xl font-bold">
               Всього: {order.totalPrice} грн
             </div>
-            {/* <div className="mt-2 text-right">
-              <Link to={`/order/${order.id}`} className="text-blue-600 hover:underline text-sm">Детальніше</Link>
-            </div> */}
           </div>
         ))}
       </div>

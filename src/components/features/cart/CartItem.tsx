@@ -19,14 +19,12 @@ export const CartItem = ({ item, wine }) => {
   };
 
   const handleIncrement = () => {
-    dispatch(
-      updateCartItem({ wineId: item.id, quantity: item.quantity + 1 })
-    );
+    dispatch(updateCartItem({ wineId: item.id, quantity: item.quantity + 1 }));
   };
 
   const handleClear = () => {
     console.log("Deleting wineId:", item.wineId, wine.id);
-  dispatch(removeWineFromCart(item.id));
+    dispatch(removeWineFromCart(item.id));
   };
 
   return (
@@ -40,17 +38,27 @@ export const CartItem = ({ item, wine }) => {
       >
         ×
       </button>
-
-      <div className="w-70 flex-shrink-0 flex justify-center">
-        <img
-          src={`http://localhost:8080${wine.imageUrl}`}
-          alt="Вино"
-          className="h-70 object-contain"
-        />
-      </div>
+      <a
+        href={`/wine/${wine.id}`}
+        className="hover:opacity-80 transition-opacity duration-300"
+      >
+        <div className="w-70 flex-shrink-0 flex justify-center">
+          <img
+            src={`http://localhost:8080${wine.imageUrl}`}
+            alt="Вино"
+            className="h-70 object-contain"
+          />
+        </div>
+      </a>
 
       <div className="flex flex-col">
-        <h2 className="text-3xl font-semibold mb-6">{wine.name}</h2>
+        <a
+          href={`/wine/${wine.id}`}
+        className="hover:opacity-70 transition-opacity duration-300"
+        >
+          <h2 className="text-3xl font-semibold mb-6">{wine.name}</h2>
+        </a>
+
         <div className="flex items-baseline gap-10 mb-6">
           <span className="text-[#721b1a] text-2xl font-medium">
             {wine.price} грн

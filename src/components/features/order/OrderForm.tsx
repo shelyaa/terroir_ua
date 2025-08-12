@@ -1,6 +1,6 @@
 import { ChevronLeft } from "lucide-react";
 import { FormInput } from "../../ui/input";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Textarea } from "../../ui/textarea";
 import { useNavigate } from "react-router-dom";
 import { Label } from "../../ui/label";
@@ -22,6 +22,10 @@ export const OrderForm = ({ onReturn }: OrderProps) => {
   const checkoutUser = useAppSelector((state) => state.checkoutUser);
   const { token } = useAuth();
   const navigate = useNavigate();
+
+  useEffect(() => {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
 
   const [orderFormData, setOrderFormData] = useState<OrderUser>({
     firstName: checkoutUser?.firstName || "",
