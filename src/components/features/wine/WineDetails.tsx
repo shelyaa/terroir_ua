@@ -28,6 +28,7 @@ export const WineDetails = () => {
           await new Promise((resolve) => setTimeout(resolve, 300));
           const data = await getWineById(id);
           setWine(data);
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         } catch (e) {
           setWine(null);
         }
@@ -201,7 +202,7 @@ export const WineDetails = () => {
           </div>
         </div>
       </div>
-      <RecommendationSlider id={id} />
+      {id && <RecommendationSlider id={id} />}
     </div>
   );
 };

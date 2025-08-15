@@ -20,7 +20,7 @@ export const WineSlider: FC = () => {
         setProducts(data.content);
         setLoading(false);
       })
-      .catch((error) => {
+      .catch(() => {
         setLoading(false);
       });
   }, [emblaApi]);

@@ -161,7 +161,7 @@ export const Filtration = ({
       params.producer = queryPayload.producers.join(",");
     if (queryPayload.name) params.name = queryPayload.name;
 
-    setSearchParams(params);
+    setSearchParams(new URLSearchParams(params));
     console.log(params);
     setIsFilterOpen(false);
   };
