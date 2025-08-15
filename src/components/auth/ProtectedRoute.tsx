@@ -1,8 +1,8 @@
 import { Navigate } from "react-router-dom";
-import { useAppSelector } from "../hooks/redux";
-import { useAuth } from "../hooks/useAuth";
 
 import { ReactNode } from "react";
+import { useAuth } from "../../hooks/useAuth";
+import { useAppSelector } from "../../hooks/redux";
 
 type ProtectedRouteProps = {
   children: ReactNode;

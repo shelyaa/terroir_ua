@@ -1,8 +1,17 @@
 import { removeWineFromCart, updateCartItem } from "../../../api/cart";
 import { useAppDispatch, useAppSelector } from "../../../hooks/redux";
-import { wineType } from "../../../types/Wine";
+import { Wine, wineType } from "../../../types/Wine";
 
-export const CartItem = ({ item, wine }) => {
+interface CartItemProps {
+  item: {
+    id: string;
+    wineId: string;
+    quantity: number;
+  };
+  wine: Wine;
+}
+
+export const CartItem: React.FC<CartItemProps> = ({ item, wine }) => {
   const dispatch = useAppDispatch();
   const loading = useAppSelector((state) => state.cart.loading);
 
@@ -54,7 +63,7 @@ export const CartItem = ({ item, wine }) => {
       <div className="flex flex-col">
         <a
           href={`/wine/${wine.id}`}
-        className="hover:opacity-70 transition-opacity duration-300"
+          className="hover:opacity-70 transition-opacity duration-300"
         >
           <h2 className="text-3xl font-semibold mb-6">{wine.name}</h2>
         </a>

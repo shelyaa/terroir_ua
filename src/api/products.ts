@@ -9,7 +9,7 @@ export async function addProduct(
 ): Promise<Partial<ErrorResponse>> {
   try {
     console.log(token);
-    const response = await axios.post<Wine>(
+    await axios.post<Wine>(
       "http://localhost:8080/wines",
       formData,
       {
@@ -37,7 +37,7 @@ export async function updateProduct(
 ): Promise<Partial<ErrorResponse>> {
   try {
     console.log(token);
-    const response = await axios.put<Wine>(
+    await axios.put<Wine>(
       `http://localhost:8080/wines/${id}`,
       formData,
       {

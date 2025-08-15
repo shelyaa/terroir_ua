@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Wine, wineType } from "../../../types/Wine";
 import { ChevronLeft } from "lucide-react";
 import StarIcon from "@mui/icons-material/Star";
@@ -17,8 +17,7 @@ export const WineDetails = () => {
   const [checkoutDisabled, setCheckoutDisabled] = useState(false);
   const [wine, setWine] = useState<Wine | null>(null);
   const [quantity, setQuantity] = useState(1);
-    const navigate = useNavigate();
-
+  const navigate = useNavigate();
 
   const { addWine, loading } = useCart();
 

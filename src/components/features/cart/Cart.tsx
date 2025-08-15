@@ -6,8 +6,13 @@ import { fetchCart } from "../../../api/fetchCart";
 import { CartItem } from "./CartItem";
 import { SkeletonCartItem } from "../../ui/SkeletonCartItem";
 import { useAuth } from "../../../hooks/useAuth";
+import { Wine } from "../../../types/Wine";
 
-export const Cart = ({ onCheckout }) => {
+type CartProps = {
+  onCheckout: () => void;
+};
+
+export const Cart = ({ onCheckout }: CartProps) => {
   const { token } = useAuth();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -19,7 +24,9 @@ export const Cart = ({ onCheckout }) => {
   const error = useAppSelector((state) => state.cart.error);
 
   const [loading, setLoading] = useState(true);
-  const [wines, setWines] = useState<Record<string, any>>({});
+
+
+  const [wines, setWines] = useState<Record<string, Wine>>({});
 
   useEffect(() => {
     if (token) {
