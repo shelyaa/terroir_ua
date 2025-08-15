@@ -6,15 +6,14 @@ type OrderPaymentProps = {
 export const OrderPayment = ({selected, setSelected}: OrderPaymentProps) => {
   return (
     <div>
-      <h1 className="text-2xl font-medium border-b pb-2 border-black mb-8 font-serif">
+      <h1 className="text-2xl font-medium border-b pb-2 border-black mb-4 font-serif">
         Дані картки
       </h1>
       <div>
-        <p className="font-manrope mb-4 font-normal">Оплатити за допомогою</p>
-        <div className="flex flex-col gap-4 mt-4">
+        <div className="flex flex-col gap-4">
           <label className="flex items-center cursor-pointer gap-3">
             <span
-              className={`w-6 h-6 flex items-center justify-center rounded-full border-4 ${
+              className={`w-4 h-4 flex items-center justify-center rounded-full border-2 ${
                 selected === "card" ? "border-[#521b1a]" : "border-gray-300"
               }`}
               onClick={() => setSelected("card")}
@@ -23,7 +22,7 @@ export const OrderPayment = ({selected, setSelected}: OrderPaymentProps) => {
               aria-checked={selected === "card"}
             >
               <span
-                className={`block w-2.5 h-2.5 rounded-full ${
+                className={`block w-2 h-2 rounded-full ${
                   selected === "card" ? "bg-[#521b1a]" : ""
                 }`}
               />
@@ -49,7 +48,7 @@ export const OrderPayment = ({selected, setSelected}: OrderPaymentProps) => {
           </label>
           <label className="flex items-center cursor-pointer gap-3">
             <span
-              className={`w-6 h-6 flex items-center justify-center rounded-full border-4 ${
+              className={`w-4 h-4 flex items-center justify-center rounded-full border-2 ${
                 selected === "cash" ? "border-[#521b1a]" : "border-gray-300"
               }`}
               onClick={() => setSelected("cash")}
@@ -58,7 +57,7 @@ export const OrderPayment = ({selected, setSelected}: OrderPaymentProps) => {
               aria-checked={selected === "cash"}
             >
               <span
-                className={`block w-2.5 h-2.5 rounded-full ${
+                className={`block w-2 h-2 rounded-full ${
                   selected === "cash" ? "bg-[#521b1a]" : ""
                 }`}
               />

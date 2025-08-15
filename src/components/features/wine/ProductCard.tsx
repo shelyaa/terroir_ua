@@ -10,6 +10,7 @@ import {
   CardHeader,
   CardTitle,
 } from "../../ui/card";
+import { API_URL } from "../../../constants/apiConstant";
 
 type ProductCardProps = {
   wine: Wine;
@@ -36,7 +37,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
 
       <div className="flex justify-center ">
         <img
-          src={`http://localhost:8080` + wine.imageUrl}
+          src={API_URL + wine.imageUrl}
           alt={wine.name}
           className="max-h-64 object-contain"
         />

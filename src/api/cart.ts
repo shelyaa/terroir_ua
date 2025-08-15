@@ -12,7 +12,7 @@ export const addWineToCart = createAsyncThunk(
       const token = (getState() as RootState).user.token;
       if (!token) return rejectWithValue("Користувач не авторизований");
       await axios.post(
-        'http://localhost:8080/cart',
+        "http://localhost:8080/cart",
         { wineId, quantity },
         { headers: { Authorization: `Bearer ${token}` } }
       );

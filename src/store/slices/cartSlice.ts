@@ -1,6 +1,10 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { fetchCart } from "../../api/fetchCart";
-import { addWineToCart, removeWineFromCart, updateCartItem } from "../../api/cart";
+import {
+  addWineToCart,
+  removeWineFromCart,
+  updateCartItem,
+} from "../../api/cart";
 import { CartState } from "../../types/Cart";
 
 const initialState: CartState = {
@@ -22,7 +26,6 @@ const cartSlice = createSlice({
     setError: (state, action: PayloadAction<string | null>) => {
       state.error = action.payload;
     },
-    // Якщо треба локально очищати стейт корзини (наприклад після логаута)
     clearCart: (state) => {
       state.cartItems = [];
       state.amount = 0;
@@ -34,13 +37,13 @@ const cartSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      // fetchCart
       .addCase(fetchCart.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
       .addCase(
         fetchCart.fulfilled,
+
         (state, action: PayloadAction<CartState>) => {
           state.cartItems = action.payload.cartItems;
           state.amount = action.payload.amount;
@@ -54,7 +57,6 @@ const cartSlice = createSlice({
         state.loading = false;
         state.error = (action.payload as string) || "Не вдалося отримати кошик";
       })
-      // addWineToCart
       .addCase(addWineToCart.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -74,7 +76,6 @@ const cartSlice = createSlice({
         state.loading = false;
         state.error = (action.payload as string) || "Не вдалося додати у кошик";
       })
-      // update
       .addCase(updateCartItem.pending, (state) => {
         state.loading = true;
         state.error = null;

@@ -2,10 +2,10 @@ export const getIconClass = (
   path: string,
   isActive: (path: string) => boolean
 ) =>
-  `p-2 rounded-full transition duration-200 w-10 h-10 flex items-center justify-center hover:text-black ${
+  `p-2 rounded-full transition duration-200 w-10 h-10 flex items-center justify-center hover:text-black border ${
     isActive(path)
-      ? "border-1 border-[#590004] text-[#590004] bg-white"
-      : "text-[#5A5A5A]"
+      ? " border-[#590004] text-[#590004] bg-white"
+      : "text-[#5A5A5A] border-main"
   }`;
 
 export const getPageClass = (

@@ -84,7 +84,7 @@ export const LoginForm: FC<FormProps> = ({ handleClick, error, setError }) => {
 
       <div className="text-sm text-center">
         <span className="text-muted-foreground">Забув пароль? </span>
-        <Link to="/reset-password" className="text-red-900 font-semibold">
+        <Link to="/auth/reset-password" className="text-red-900 font-semibold">
           Змінити пароль
         </Link>
       </div>

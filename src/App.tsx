@@ -6,25 +6,29 @@ import { useEffect, useState } from "react";
 import { SearchBar } from "./components/features/filtration/SearchBar";
 import { useAppDispatch } from "./hooks/redux";
 import { setUser } from "./store/slices/userSlice";
+import { fetchCart } from "./api/fetchCart";
+import { useAuth } from "./hooks/useAuth";
 
 export const App = () => {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const dispatch = useAppDispatch();
   const [loading, setLoading] = useState(true);
+  const {token} = useAuth();
 
   useEffect(() => {
     const userStr = localStorage.getItem("user");
-    console.log("userStr з localStorage:", userStr);
 
     if (userStr) {
       const user = JSON.parse(userStr);
       dispatch(setUser(user));
-      console.log("dispatch setUser:", user);
+      if (token) {
+        dispatch(fetchCart());
+      }
     }
-    setLoading(false); 
-  }, [dispatch]);
+    setLoading(false);
+  }, [dispatch, token]);
 
-  if (loading) return null; 
+  if (loading) return null;
 
   return (
     <div className="relative">

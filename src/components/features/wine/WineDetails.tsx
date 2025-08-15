@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { Wine, wineType } from "../../../types/Wine";
 import { ChevronLeft } from "lucide-react";
 import StarIcon from "@mui/icons-material/Star";
@@ -17,6 +17,8 @@ export const WineDetails = () => {
   const [checkoutDisabled, setCheckoutDisabled] = useState(false);
   const [wine, setWine] = useState<Wine | null>(null);
   const [quantity, setQuantity] = useState(1);
+    const navigate = useNavigate();
+
 
   const { addWine, loading } = useCart();
 
@@ -55,12 +57,12 @@ export const WineDetails = () => {
 
   return (
     <div className="max-w-6xl mx-auto px-2 sm:px-6 py-4 sm:py-8 font-manrope font-medium text-sm">
-      <Link
-        to="/wine"
+      <button
+        onClick={() => navigate(-1)}
         className="flex items-center text-gray-500 hover:text-black mb-4 sm:mb-6"
       >
         <ChevronLeft className="mr-1" />
-      </Link>
+      </button>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
         {/* Image and rating block - on mobile comes first */}
@@ -92,10 +94,12 @@ export const WineDetails = () => {
             </button>
           </div>
         </div>
-        
+
         {/* Wine details */}
         <div className="space-y-4 sm:space-y-6 w-full">
-          <p className="text-2xl sm:text-4xl font-bold font-cormorant">{wine.name}</p>
+          <p className="text-2xl sm:text-4xl font-bold font-cormorant">
+            {wine.name}
+          </p>
 
           <div className="flex flex-wrap items-center gap-4 sm:gap-25 text-lg sm:text-xl text-red-900 font-cormorant">
             <p>{wine.price} грн</p>

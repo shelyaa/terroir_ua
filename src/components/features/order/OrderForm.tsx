@@ -10,6 +10,7 @@ import { OrderUser } from "../../../types/Order";
 import { createOrder } from "../../../api/order";
 import { OrderPayment } from "./OrderPayment";
 import { Button } from "../../ui/button";
+import { PatternFormat } from "react-number-format";
 
 type OrderProps = {
   onReturn: () => void;
@@ -24,8 +25,8 @@ export const OrderForm = ({ onReturn }: OrderProps) => {
   const navigate = useNavigate();
 
   useEffect(() => {
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    });
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, []);
 
   const [orderFormData, setOrderFormData] = useState<OrderUser>({
     firstName: checkoutUser?.firstName || "",
@@ -94,8 +95,8 @@ export const OrderForm = ({ onReturn }: OrderProps) => {
 
     const orderId = await createOrder(payload, token);
 
-    if (selected === 'cash') {
-      navigate('/payments/success')
+    if (selected === "cash") {
+      navigate("/payments/success");
       return;
     }
 
@@ -260,10 +261,13 @@ export const OrderForm = ({ onReturn }: OrderProps) => {
                 >
                   Номер телефону
                 </Label>
-                <FormInput
-                  type="text"
-                  id="phoneNumber"
+                <PatternFormat
+                  customInput={FormInput}
+                  type="tel"
+                  format="+38 (###) ###-##-##"
+                  mask="_"
                   name="phoneNumber"
+                  id="phone"
                   placeholder="Введіть тут"
                   value={orderFormData.phoneNumber}
                   onChange={handleChange}

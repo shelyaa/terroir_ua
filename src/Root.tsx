@@ -25,6 +25,7 @@ import { PaymentCancelPage } from "./pages/PaymentCancelPage";
 import { AdminProfilePage } from "./pages/admin/AdminProfilePage";
 import { MyOrdersPage } from "./pages/MyOrdersPage";
 import { AdminLayout } from "./components/layout/admin/AdminLayout";
+import { ResetPasswordPage } from "./pages/ResetPasswordPage";
 
 function AppWithUserInit() {
   const dispatch = useDispatch();
@@ -48,6 +49,7 @@ function AppWithUserInit() {
           <Route index element={<HomePage />} />
           <Route path="/home" element={<Navigate to="/" replace />} />
           <Route path="/auth" element={<LoginPage />} />
+          <Route path="/auth/reset-password" element={<ResetPasswordPage />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/account" element={<ProfilePage />} />
           <Route path="/account/my-orders" element={<MyOrdersPage />} />

@@ -1,19 +1,10 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "../hooks/useAuth";
 import { getOrderItems, getUserOrders } from "../api/order";
-import { Wine } from "../types/Wine";
 import { getWineById } from "../api/wines";
-
-type Order = {
-  id: number;
-  createdAt: string;
-  totalPrice: number;
-  items?: (Wine & {
-    quantity: number;
-    pricePerUnit: number;
-    wineId?: number;
-  })[];
-};
+import { Loading } from "../components/ui/loading";
+import { Order } from "../types/Order";
+import { OrderItem } from "../types/orderItem";
 
 export const MyOrdersPage = () => {
   const { token } = useAuth();
@@ -28,30 +19,30 @@ export const MyOrdersPage = () => {
       const data = await getUserOrders(token);
       if (data) {
         const ordersData = data.content;
+        const reversedOrdersData = ordersData.reverse();
 
         const ordersWithItems = await Promise.all(
-          ordersData.map(async (order: Order) => {
+          reversedOrdersData.map(async (order: Order) => {
             const itemsData = await getOrderItems(order.id.toString(), token);
 
             const itemsWithDetails = await Promise.all(
-              (itemsData?.content || []).map(async (item) => {
+              (itemsData?.content || []).map(async (item: OrderItem) => {
                 try {
                   const wineDetails = await getWineById(item.wineId);
+                  console.log(item);
                   if (wineDetails) {
                     return { ...item, ...wineDetails };
                   }
                 } catch {
                   return {
                     ...item,
+                    imageUrl: "/wine/wine.png",
                     name: "Вино видалено",
-                    imageUrl: "/about/about-2.jpg",
                     isDeleted: true,
                   };
                 }
-                console.log(item.imageUrl);
               })
             );
-
             return {
               ...order,
               items: itemsWithDetails,
@@ -68,7 +59,12 @@ export const MyOrdersPage = () => {
     fetchOrders();
   }, [token]);
 
-  if (loading) return <div className="text-center py-30">Завантаження...</div>;
+  if (loading)
+    return (
+      <div className="text-center py-30 flex justify-center">
+        <Loading />
+      </div>
+    );
 
   if (!orders.length)
     return (
@@ -88,38 +84,60 @@ export const MyOrdersPage = () => {
           >
             <div className="flex justify-between items-center mb-2">
               <div>
-                <span className="font-semibold text-2xl">Замовлення №{order.id}</span>
+                <span className="font-semibold text-2xl">
+                  Замовлення №{order.id}
+                </span>
               </div>
             </div>
 
             <div className="divide-y">
-              {order.items?.map((item) => (
-                <div
-                  key={item.wineId || item.id}
-                  className="flex items-center gap-4 py-3 text-xl"
-                >
-                  <img
-                    src={
-                      item.imageUrl?.startsWith("http")
-                        ? item.imageUrl
-                        : `http://localhost:8080${item.imageUrl}`
-                    }
-                    alt={item.name}
-                    className={`w-32 h-40 object-cover rounded ${item.isDeleted ? "opacity-50 grayscale" : ""}`}
-                  />
-                  <div className="flex-1">
-                    <div
-                      className={`font-medium ${item.isDeleted ? "text-gray-400 italic" : ""}`}
-                    >
-                      {item.name}
+              {order.items?.map((item) =>
+                item.isDeleted ? (
+                  <div
+                    key={item.wineId || item.id}
+                    className="flex items-center gap-4 py-3 text-xl pointer-events-none"
+                  >
+                    <img
+                      src="/wine/wine.png"
+                      alt={item.name}
+                      className="w-32 h-40 object-cover rounded opacity-50 grayscale"
+                      style={{ cursor: "not-allowed" }}
+                    />
+                    <div className="flex-1">
+                      <div className="font-medium text-gray-400 italic">
+                        Товар видалено
+                      </div>
+                      <div className="text-gray-500">x {item.quantity}</div>
                     </div>
-                    <div className=" text-gray-500">
-                      x {item.quantity}
-                    </div>
+                    <div className="font-semibold">{item.pricePerUnit} грн</div>
                   </div>
-                  <div className="font-semibold ">{item.pricePerUnit} грн</div>
-                </div>
-              ))}
+                ) : (
+                  <a
+                    href={`/wine/${item.id}`}
+                    key={item.wineId || item.id}
+                    className="hover:opacity-60 transition-opacity duration-300"
+                  >
+                    <div className="flex items-center gap-4 py-3 text-xl">
+                      <img
+                        src={
+                          item.isDeleted
+                            ? item.imageUrl
+                            : `http://localhost:8080${item.imageUrl}`
+                        }
+                        alt={item.name}
+                        className="w-32 h-40 object-cover rounded"
+                      />
+                      <div className="flex-1">
+                        <div className="font-medium">{item.name}</div>
+                        <div className="text-gray-500">x {item.quantity}</div>
+                      </div>
+                      <div className="font-semibold">
+                        {item.pricePerUnit} грн
+                      </div>
+                    </div>
+                  </a>
+                )
+              )}
             </div>
 
             <div className="flex mt-2 text-xl font-bold">

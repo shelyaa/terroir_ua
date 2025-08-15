@@ -83,12 +83,12 @@ export const Header: FC<HeaderProps> = ({ onOpenSearch, isSearchOpen }) => {
           <Link
             to={isAuth ? "/account" : "/auth"}
             aria-label="Акаунт"
-            className={`${getIconClass("/auth", isActive)} ${getIconClass("/register", isActive)} ${getIconClass("/account", isActive)}`}
+            className={getIconClass(isAuth ? "/account" : "/auth", isActive)}
           >
             <PersonOutlineOutlinedIcon />
           </Link>
 
-          <CartLink isActive={isActive}/>
+          <CartLink isActive={isActive} />
           <button
             className="md:hidden"
             onClick={() => setMenuOpen(!menuOpen)}

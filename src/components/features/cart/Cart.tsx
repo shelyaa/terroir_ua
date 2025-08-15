@@ -1,44 +1,62 @@
 import { ChevronLeft } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../../hooks/redux";
 import { fetchCart } from "../../../api/fetchCart";
 import { CartItem } from "./CartItem";
+import { SkeletonCartItem } from "../../ui/SkeletonCartItem";
+import { useAuth } from "../../../hooks/useAuth";
 
 export const Cart = ({ onCheckout }) => {
+  const { token } = useAuth();
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+
   const cartItems = useAppSelector((state) => state.cart.cartItems);
   const amount = useAppSelector((state) => state.cart.amount);
   const deliveryPrice = useAppSelector((state) => state.cart.deliveryPrice);
   const totalPrice = useAppSelector((state) => state.cart.totalPrice);
   const error = useAppSelector((state) => state.cart.error);
-  const userId = useAppSelector((state) => state.user.id);
-  const dispatch = useAppDispatch();
-  const [wines, setWines] = useState({});
-  const navigate = useNavigate();
 
-  
+  const [loading, setLoading] = useState(true);
+  const [wines, setWines] = useState<Record<string, any>>({});
 
   useEffect(() => {
-    if (userId) {
-      dispatch(fetchCart());
+    if (token) {
+      setLoading(true);
+      dispatch(fetchCart()).finally(() => setTimeout(() => setLoading(false), 500));
+    } else {
+      setLoading(false);
     }
-  }, [userId, dispatch]);
+  }, [token, dispatch]);
 
   useEffect(() => {
-    if (!cartItems.length) return;
-
+    if (!cartItems.length) {
+      setWines({});
+      return;
+    }
+    // setLoading(true);
     Promise.all(
       cartItems.map((item) =>
         fetch(`http://localhost:8080/wines/${item.wineId}`)
           .then((res) => res.json())
           .then((data) => [item.wineId, data])
       )
-    ).then((results) => {
-      const winesObj = Object.fromEntries(results);
-      setWines(winesObj);
-    });
+    )
+      .then((results) => {
+        setWines(Object.fromEntries(results));
+      })
+      // .finally(() => setLoading(false));
   }, [cartItems]);
 
+  const renderCartItems = useCallback(() => (
+    cartItems
+      .slice()
+      .sort((a, b) => Number(a.id) - Number(b.id))
+      .map((item) => (
+        <CartItem key={item.id} item={item} wine={wines[item.wineId]} />
+      ))
+  ), [cartItems, wines]);
 
   if (error) {
     return <div className="text-center text-red-600 p-10 text-xl">{error}</div>;
@@ -49,22 +67,30 @@ export const Cart = ({ onCheckout }) => {
       <div className="flex items-center gap-2 my-4">
         <button
           onClick={() => navigate(-1)}
-          className="text-gray-500 hover:text-black "
+          className="text-gray-500 hover:text-black"
         >
           <ChevronLeft size={24} />
         </button>
         <h1 className="text-3xl font-semibold">Кошик для покупок</h1>
       </div>
-      {cartItems.length === 0 ? (
+
+      {!loading && cartItems.length === 0 && (
         <div className="text-2xl font-semibold justify-center flex p-30">
           Ваш кошик порожній
         </div>
-      ) : (
-        <div className="bg-white">
-          {cartItems.map((item) => (
-            <CartItem key={item.id} item={item} wine={wines[item.wineId]} />
-          ))}
+      )}
 
+      <div className="bg-white">
+        {loading && (
+          <div className="pt-8">
+            {Array.from({ length: 5 }).map((_, i) => (
+              <SkeletonCartItem key={i} />
+            ))}
+          </div>
+        )}
+        {renderCartItems()}
+
+        {cartItems.length > 0 && (
           <div className="flex flex-col w-full items-center mx-4">
             <div className="flex flex-row justify-between w-full md:max-w-md mb-8 md:text-2xl text-xl max-w-2xs">
               <div className="flex flex-col gap-2">
@@ -85,8 +111,8 @@ export const Cart = ({ onCheckout }) => {
               Перейти до оплати
             </button>
           </div>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 };

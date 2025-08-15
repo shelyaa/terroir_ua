@@ -140,7 +140,7 @@ export const WineCatalogPage = () => {
           <div className="">
             {isLoading ? (
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6 mt-6">
-                {Array.from({ length: 8 }).map((_, i) => (
+                {Array.from({ length: 20 }).map((_, i) => (
                   <SkeletonCard key={i} />
                 ))}
               </div>
@@ -160,7 +160,7 @@ export const WineCatalogPage = () => {
           </div>
         </div>
       </div>
-      {wines.length !== 0 && (
+      {wines.length !== 0 && !isFilterOpen && (
         <div className="mt-8 flex justify-center">
           <PaginationRounded
             page={page}

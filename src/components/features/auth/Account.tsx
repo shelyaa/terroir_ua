@@ -10,7 +10,9 @@ export const Account = () => {
         <div>{email}</div>
       </div>
       <ul className="[&_li]:text-xl font-medium w-75 [&_li]:mb-7 border-gray pl-3 [&_li]:pb-1">
-        <Link to='/account/my-orders'><li className="border-b">Мої замовлення</li></Link>
+        <Link to="/account/my-orders">
+          <li className="border-b">Мої замовлення</li>
+        </Link>
         <li>
           <SettingsDropdown />
         </li>
@@ -23,6 +25,7 @@ import { useState } from "react";
 import { ChevronUp, ChevronDown } from "lucide-react";
 import { Link } from "react-router-dom";
 import { removeUser } from "../../../store/slices/userSlice";
+import { clearCart } from "../../../store/slices/cartSlice";
 
 export const SettingsDropdown = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -31,6 +34,7 @@ export const SettingsDropdown = () => {
   const handleLogout = () => {
     dispatch(removeUser());
     localStorage.removeItem("user");
+    dispatch(clearCart());
   };
 
   return (
@@ -46,18 +50,13 @@ export const SettingsDropdown = () => {
 
       {isOpen && (
         <div className="flex flex-col font-manrope text-sm">
-          <button
+          <Link
+            to={"/"}
             className="text-left py-2 border-b border-gray-300 hover:bg-gray-100"
-            type="button"
           >
             Редагувати дані профілю
-          </button>
-          <button
-            className="text-left py-2 border-b border-gray-300  hover:bg-gray-100"
-            type="button"
-          >
-            Методи оплати
-          </button>
+          </Link>
+
           <button
             className="text-left py-2 border-b border-gray-300  hover:bg-gray-100 text-red-600"
             type="button"
