@@ -51,7 +51,7 @@ function getFiltersArray(params: FiltersQuery): React.ReactNode[] {
   }
 
   if (params.producers && params.producers.length) {
-    params.producers.forEach((producer, idx) => {
+    params.producers.forEach((producer) => {
       filters.push(
         <span
           key={`producer-${producer}`}
@@ -71,7 +71,7 @@ function getFiltersArray(params: FiltersQuery): React.ReactNode[] {
 export const AppliedFilters: React.FC<{
   filters: FiltersQuery;
   onClear?: () => void;
-}> = ({ filters, onClear }) => {
+}> = ({ filters }) => {
   const hasFilters =
     (filters.types && filters.types.length > 0) ||
     filters.minPrice ||

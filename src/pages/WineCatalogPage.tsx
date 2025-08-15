@@ -86,10 +86,11 @@ export const WineCatalogPage = () => {
   ): boolean => {
     if (isFilterOpen) return false;
     const typeParam = searchParams.get("type");
-    const onlyTypeParam = searchParams.size === 1 && typeParam;
-    const singleType = onlyTypeParam && !typeParam.includes(",");
+    const onlyTypeParam = searchParams.size === 1 && !!typeParam;
+    const singleType =
+      onlyTypeParam && typeParam && !typeParam.includes(",");
     const noParams = searchParams.toString() === "";
-    return noParams || singleType;
+    return noParams || !!singleType;
   };
 
   const queryParams = getQueryParams();
