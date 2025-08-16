@@ -4,7 +4,13 @@ import { getOrderItems, getUserOrders } from "../api/order";
 import { getWineById } from "../api/wines";
 import { Loading } from "../components/ui/loading";
 import { Order } from "../types/Order";
-import { OrderItem } from "../types/orderItem";
+
+export type OrderItem = {
+  id: string;
+  pricePerUnit: number;
+  quantity: number;
+  wineId: string;
+};
 
 export const MyOrdersPage = () => {
   const { token } = useAuth();
