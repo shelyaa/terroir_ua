@@ -1,46 +1,50 @@
-import { GoogleLogin } from "@react-oauth/google";
-import { useNavigate, useSearchParams } from "react-router-dom";
-import axios from "axios";
-import { setUser } from "../../../store/slices/userSlice";
-import { useAppDispatch } from "../../../hooks/redux";
+// import { GoogleLogin } from "@react-oauth/google";
+// import { useSearchParams } from "react-router-dom";
+
+// export function GoogleLoginButton() {
+//   const [searchParams] = useSearchParams();
+//   const redirect = searchParams.get("redirect") || "/account";
+
+//   const API = "http://localhost:8080";
+
+//   const startGoogle = () => {
+//     localStorage.setItem("postLoginRedirect", redirect);
+//     window.location.href = `${API}/oauth2/authorization/google`;
+//   };
+
+//   return (
+//     <div className="flex justify-center items-center">
+//       <div onClick={startGoogle} className="cursor-pointer">
+//         <GoogleLogin
+//           locale="uk"
+//           onSuccess={() => {}}
+//           onError={() => {}}
+//           useOneTap={false}
+//         />
+//       </div>
+//     </div>
+//   );
+// }
+
+import { useSearchParams } from "react-router-dom";
 
 export function GoogleLoginButton() {
-  const navigate = useNavigate();
-  const dispatch = useAppDispatch();
   const [searchParams] = useSearchParams();
-  const redirect = searchParams.get("redirect");
+  const redirect = searchParams.get("redirect") || "/account";
+
+  const API = "http://localhost:8080";
+
+  const startGoogle = () => {
+    localStorage.setItem("postLoginRedirect", redirect);
+    window.location.href = `${API}/oauth2/authorization/google`;
+  };
 
   return (
-    <div className="flex justify-center items-center">
-      <GoogleLogin
-        locale="uk"
-        onSuccess={async (credentialResponse) => {
-          try {
-            const res = await axios.post("http://localhost:8080/auth/google", {
-              credential: credentialResponse.credential,
-            });
-            const { token, id, name, email, role } = res.data;
-
-            dispatch(setUser({ id, name, email, token, role }));
-            localStorage.setItem(
-              "user",
-              JSON.stringify({ id, name, email, token, role })
-            );
-            if (role === "ROLE_MANAGER") {
-              navigate("/admin");
-            } else if (redirect) {
-              navigate(redirect);
-            } else {
-              navigate("/account");
-            }
-          } catch (err) {
-            alert("Помилка Google-авторизації");
-          }
-        }}
-        onError={() => {
-          alert("Помилка Google-авторизації");
-        }}
-      />
-    </div>
+    <button
+      onClick={startGoogle}
+      className="px-4 py-2 rounded bg-black text-white"
+    >
+      Увійти через Google
+    </button>
   );
 }

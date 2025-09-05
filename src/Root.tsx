@@ -24,8 +24,8 @@ import { ScrollToTop } from "./components/ui/ScrollToTop";
 import { PaymentCancelPage } from "./pages/PaymentCancelPage";
 import { AdminProfilePage } from "./pages/admin/AdminProfilePage";
 import { MyOrdersPage } from "./pages/MyOrdersPage";
-import { AdminLayout } from "./components/layout/admin/AdminLayout";
 import { ResetPasswordPage } from "./pages/ResetPasswordPage";
+import { AdminLayout } from "./components/layout/admin/AdminLayout";
 
 function AppWithUserInit() {
   const dispatch = useDispatch();

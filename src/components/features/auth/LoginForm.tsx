@@ -1,9 +1,11 @@
-import { Label } from "../../ui/label";
-import { Input } from "../../ui/input";
-import { Button } from "../../ui/button";
-import { Link } from "react-router-dom";
-import { FC, useState } from "react";
+import { Label } from "../.././ui/label";
+import { Input } from "../.././ui/input";
+import { Button } from "../.././ui/button";
+import { Link, useNavigate } from "react-router-dom";
+import { FC, useEffect, useState } from "react";
 import { GoogleLoginButton } from "./GoogleLoginButton";
+import { useAppDispatch } from "../../../hooks/redux";
+import { setUser } from "../../../store/slices/userSlice";
 
 interface FormProps {
   handleClick: (email: string, pass: string) => Promise<boolean>;
@@ -14,6 +16,34 @@ interface FormProps {
 export const LoginForm: FC<FormProps> = ({ handleClick, error, setError }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    const hash = new URLSearchParams(window.location.hash.replace(/^#/, ""));
+    const token = hash.get("token");
+    const role = hash.get("role");
+    if (!token) return;
+
+    const user = { id: null, name: null, email: null, token, role };
+    dispatch(setUser(user));
+    localStorage.setItem("user", JSON.stringify(user));
+
+    window.history.replaceState(
+      null,
+      "",
+      window.location.pathname + window.location.search
+    );
+
+    const post = localStorage.getItem("postLoginRedirect") || "/account";
+    localStorage.removeItem("postLoginRedirect");
+
+    if (role === "ROLE_MANAGER") {
+      navigate("/admin", { replace: true });
+    } else {
+      navigate(post, { replace: true });
+    }
+  }, [dispatch, navigate]);
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -84,7 +114,7 @@ export const LoginForm: FC<FormProps> = ({ handleClick, error, setError }) => {
 
       <div className="text-sm text-center">
         <span className="text-muted-foreground">Забув пароль? </span>
-        <Link to="/auth/reset-password" className="text-red-900 font-semibold">
+        <Link to="/reset-password" className="text-red-900 font-semibold">
           Змінити пароль
         </Link>
       </div>
