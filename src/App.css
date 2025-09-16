@@ -9,6 +9,9 @@ body {
   font-weight: 100;
   background-color: #f3f3f3;
 }
+button {
+  cursor: pointer;
+}
 
 @theme {
   --font-manrope: "Manrope", "sans-serif";
@@ -138,8 +141,7 @@ body {
 }
 .embla {
   overflow: hidden;
-    width: 100%;
-
+  width: 100%;
 }
 .embla__viewport {
   overflow: hidden;
@@ -150,22 +152,22 @@ body {
   gap: 2rem;
 }
 .embla__slide {
-  flex: 0 0 25%;    
-  min-width: 0;     
+  flex: 0 0 25%;
+  min-width: 0;
   box-sizing: border-box;
 }
 @media (max-width: 1024px) {
   .embla__slide {
-    flex: 0 0 33.3333%; 
+    flex: 0 0 33.3333%;
   }
 }
 @media (max-width: 768px) {
   .embla__slide {
-    flex: 0 0 50%; 
+    flex: 0 0 50%;
   }
 }
 @media (max-width: 480px) {
   .embla__slide {
-    flex: 0 0 75%; 
+    flex: 0 0 75%;
   }
 }

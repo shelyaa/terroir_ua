@@ -16,8 +16,8 @@ export default function ProtectedRoute({
   const isAuth = useAuth();
   const user = useAppSelector((state) => state.user);
 
-  if (!isAuth) return <Navigate to="/auth" />;
-  if (requiredRole && !user.role) return null; // чекаємо, поки підвантажиться
+  if (!isAuth) return <Navigate to="/login" />;
+  if (requiredRole && !user.role) return null; 
   if (requiredRole && user.role !== requiredRole)
     return <Navigate to="/wine" />;
   console.log(requiredRole, user.role, isAuth);

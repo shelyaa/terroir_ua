@@ -6,6 +6,7 @@ import { FC, useEffect, useState } from "react";
 import { GoogleLoginButton } from "./GoogleLoginButton";
 import { useAppDispatch } from "../../../hooks/redux";
 import { setUser } from "../../../store/slices/userSlice";
+import axios from "axios";
 
 interface FormProps {
   handleClick: (email: string, pass: string) => Promise<boolean>;
@@ -20,29 +21,45 @@ export const LoginForm: FC<FormProps> = ({ handleClick, error, setError }) => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
+    // 1) read token from query or hash
+    const search = new URLSearchParams(window.location.search);
     const hash = new URLSearchParams(window.location.hash.replace(/^#/, ""));
-    const token = hash.get("token");
-    const role = hash.get("role");
-    if (!token) return;
+    const token = search.get("token") || hash.get("token");
+    const role = search.get("role") || hash.get("role");
 
-    const user = { id: null, name: null, email: null, token, role };
-    dispatch(setUser(user));
-    localStorage.setItem("user", JSON.stringify(user));
+    // 2) quick diagnostics
+    console.debug("OAuth callback URL", {
+      pathname: window.location.pathname,
+      search: window.location.search,
+      hash: window.location.hash,
+      token,
+      role,
+    });
 
-    window.history.replaceState(
-      null,
-      "",
-      window.location.pathname + window.location.search
-    );
+    if (!token) return; // nothing to do; user may be doing email/password
 
-    const post = localStorage.getItem("postLoginRedirect") || "/account";
-    localStorage.removeItem("postLoginRedirect");
+    // 3) optional: fetch user
+    (async () => {
+      try {
+        const meRes = await axios.get("http://localhost:8080/users/me", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        const { id, name, email: userEmail } = meRes.data;
+        const user = { id, name, email: userEmail, token, role };
 
-    if (role === "ROLE_MANAGER") {
-      navigate("/admin", { replace: true });
-    } else {
-      navigate(post, { replace: true });
-    }
+        dispatch(setUser(user));
+        localStorage.setItem("user", JSON.stringify(user));
+
+        window.history.replaceState(null, "", "/auth");
+
+        const post = localStorage.getItem("postLoginRedirect") || "/account";
+        localStorage.removeItem("postLoginRedirect");
+
+        navigate(role === "ROLE_MANAGER" ? "/admin" : post, { replace: true });
+      } catch (e) {
+        console.error("Failed to load /users/me after OAuth", e);
+      }
+    })();
   }, [dispatch, navigate]);
 
   const onSubmit = async (e: React.FormEvent) => {
@@ -79,7 +96,6 @@ export const LoginForm: FC<FormProps> = ({ handleClick, error, setError }) => {
           className={error ? "border-red-600 bg-red-50" : ""}
         />
       </div>
-
       <div className="space-y-2">
         <Label
           htmlFor="password"
@@ -120,7 +136,7 @@ export const LoginForm: FC<FormProps> = ({ handleClick, error, setError }) => {
       </div>
 
       <div className="text-center text-muted-foreground">або</div>
-      <div className="">
+      <div className="flex justify-center">
         <GoogleLoginButton />
       </div>
       <Button

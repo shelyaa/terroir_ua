@@ -1,6 +1,6 @@
 import { ChevronLeft } from "lucide-react";
 import { useEffect, useState, useCallback } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../../hooks/redux";
 import { fetchCart } from "../../../api/fetchCart";
 import { CartItem } from "./CartItem";
@@ -16,6 +16,7 @@ export const Cart = ({ onCheckout }: CartProps) => {
   const { token } = useAuth();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const { isAuth } = useAuth();
 
   const cartItems = useAppSelector((state) => state.cart.cartItems);
   const amount = useAppSelector((state) => state.cart.amount);
@@ -25,13 +26,14 @@ export const Cart = ({ onCheckout }: CartProps) => {
 
   const [loading, setLoading] = useState(true);
 
-
   const [wines, setWines] = useState<Record<string, Wine>>({});
 
   useEffect(() => {
     if (token) {
       setLoading(true);
-      dispatch(fetchCart()).finally(() => setTimeout(() => setLoading(false), 500));
+      dispatch(fetchCart()).finally(() =>
+        setTimeout(() => setLoading(false), 500)
+      );
     } else {
       setLoading(false);
     }
@@ -49,21 +51,22 @@ export const Cart = ({ onCheckout }: CartProps) => {
           .then((res) => res.json())
           .then((data) => [item.wineId, data])
       )
-    )
-      .then((results) => {
-        setWines(Object.fromEntries(results));
-      })
-      // .finally(() => setLoading(false));
+    ).then((results) => {
+      setWines(Object.fromEntries(results));
+    });
+    // .finally(() => setLoading(false));
   }, [cartItems]);
 
-  const renderCartItems = useCallback(() => (
-    cartItems
-      .slice()
-      .sort((a, b) => Number(a.id) - Number(b.id))
-      .map((item) => (
-        <CartItem key={item.id} item={item} wine={wines[item.wineId]} />
-      ))
-  ), [cartItems, wines]);
+  const renderCartItems = useCallback(
+    () =>
+      cartItems
+        .slice()
+        .sort((a, b) => Number(a.id) - Number(b.id))
+        .map((item) => (
+          <CartItem key={item.id} item={item} wine={wines[item.wineId]} />
+        )),
+    [cartItems, wines]
+  );
 
   if (error) {
     return <div className="text-center text-red-600 p-10 text-xl">{error}</div>;
@@ -81,9 +84,32 @@ export const Cart = ({ onCheckout }: CartProps) => {
         <h1 className="text-3xl font-semibold">Кошик для покупок</h1>
       </div>
 
-      {!loading && cartItems.length === 0 && (
+      {!loading && cartItems.length === 0 && isAuth && (
         <div className="text-2xl font-semibold justify-center flex p-30">
           Ваш кошик порожній
+        </div>
+      )}
+
+      {!loading && !isAuth && (
+        <div className="flex flex-col items-center justify-center h-[60vh] font-manrope">
+          <p className="text-lg md:text-xl font-semibold mb-8 text-center ">
+            Щоб додати товар у кошик — увійдіть або зареєструйтесь!
+          </p>
+
+          <div className="flex gap-4">
+            <Link
+              to="/login"
+              className="px-6 py-2 rounded-md bg-bordo text-white font-medium hover:bg-red-900 transition"
+            >
+              Увійти
+            </Link>
+            <Link
+              to="/register"
+              className="px-6 py-2 rounded-md bg-bordo text-white font-medium hover:bg-red-900 transition"
+            >
+              Зареєструватись
+            </Link>
+          </div>
         </div>
       )}
 

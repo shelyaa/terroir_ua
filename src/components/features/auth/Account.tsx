@@ -11,7 +11,7 @@ export const Account = () => {
       </div>
       <ul className="[&_li]:text-xl font-medium w-75 [&_li]:mb-7 border-gray pl-3 [&_li]:pb-1">
         <Link to="/account/my-orders">
-          <li className="border-b">Мої замовлення</li>
+          <li className="border-b hover:text-gray-700">Мої замовлення</li>
         </Link>
         <li>
           <SettingsDropdown />
@@ -41,7 +41,7 @@ export const SettingsDropdown = () => {
     <div className="w-full max-w-sm">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center justify-between w-full border-b border-gray-200 pb-1 mb-2"
+        className="flex items-center justify-between w-full border-b border-gray-200 pb-1 mb-2 cursor-pointer hover:text-gray-700"
         type="button"
       >
         Налаштування

@@ -24,7 +24,7 @@ export function useCart() {
       options?.onAuthRedirect?.();
       setTimeout(() => {
         setLoading(false);
-        navigate(`/auth/?redirect=/order`);
+        navigate(`/login/?redirect=/order`);
       }, 1000);
       await dispatch(addWineToCart({ wineId: wine.id, quantity })).unwrap();
 

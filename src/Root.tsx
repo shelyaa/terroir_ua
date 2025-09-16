@@ -48,7 +48,7 @@ function AppWithUserInit() {
         <Route path="/" element={<App />}>
           <Route index element={<HomePage />} />
           <Route path="/home" element={<Navigate to="/" replace />} />
-          <Route path="/auth" element={<LoginPage />} />
+          <Route path="/login" element={<LoginPage />} />
           <Route path="/auth/reset-password" element={<ResetPasswordPage />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/account" element={<ProfilePage />} />

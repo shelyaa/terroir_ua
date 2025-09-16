@@ -68,7 +68,6 @@ export const RegisterForm: FC<FormProps> = ({ handleClick, error }) => {
     handleClick(email, password, name);
   };
 
-  // Очищаємо помилку при зміні відповідного поля
   const handleNameChange = (v: string) => {
     setName(v);
     if (fieldError === "name") {
@@ -194,7 +193,10 @@ export const RegisterForm: FC<FormProps> = ({ handleClick, error }) => {
 
       <div className="text-center">або</div>
 
-      <GoogleLoginButton />
+      <div className="flex justify-center">
+        {" "}
+        <GoogleLoginButton />
+      </div>
 
       <Button
         type="submit"

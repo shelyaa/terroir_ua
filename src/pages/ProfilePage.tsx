@@ -11,6 +11,6 @@ export const ProfilePage = () => {
       <Account />
     </div>
   ) : (
-    <Navigate to="/auth" replace />
+    <Navigate to="/login" replace />
   );
 };

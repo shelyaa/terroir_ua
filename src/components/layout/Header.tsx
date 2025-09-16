@@ -81,9 +81,9 @@ export const Header: FC<HeaderProps> = ({ onOpenSearch, isSearchOpen }) => {
             <SearchIcon />
           </button>
           <Link
-            to={isAuth ? "/account" : "/auth"}
+            to={isAuth ? "/account" : "/login"}
             aria-label="Акаунт"
-            className={getIconClass(isAuth ? "/account" : "/auth", isActive)}
+            className={getIconClass(isAuth ? "/account" : "/login", isActive)}
           >
             <PersonOutlineOutlinedIcon />
           </Link>

@@ -13,6 +13,6 @@ export const AdminProfilePage = () => {
       <AdminAccount />
     </div>
   ) : (
-    <Navigate to="/auth" />
+    <Navigate to="/login" />
   );
 };
