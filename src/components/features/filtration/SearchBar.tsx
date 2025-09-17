@@ -4,6 +4,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import { X } from "lucide-react";
 import { Wine } from "../../../types/Wine";
 import { ProductCard } from "../wine/ProductCard";
+import { API_BASE } from "../../../constants/apiConstant";
 
 type Props = {
   setIsSearchOpen: (isSearchOpen: boolean) => void;
@@ -17,7 +18,7 @@ export const SearchBar: FC<Props> = ({ setIsSearchOpen }) => {
 
   // Отримання вин з бекенду
   useEffect(() => {
-    fetch("http://localhost:8080/wines")
+    fetch(`${API_BASE}/wines`)
       .then((response) => response.json())
       .then((data) => {
         setProducts(data.content);

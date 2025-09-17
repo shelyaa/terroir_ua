@@ -1,14 +1,13 @@
-import { useSearchParams } from "react-router-dom";
+import {useSearchParams} from "react-router-dom";
+import {API_BASE} from "../../../constants/apiConstant";
 
 export function GoogleLoginButton() {
   const [searchParams] = useSearchParams();
   const redirect = searchParams.get("redirect") || "/account";
 
-  const API = "http://localhost:8080";
-
   const startGoogle = () => {
     localStorage.setItem("postLoginRedirect", redirect);
-    window.location.href = `${API}/oauth2/authorization/google`;
+    window.location.href = `${API_BASE}/oauth2/authorization/google`;
   };
 
   return (

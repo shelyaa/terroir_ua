@@ -1,4 +1,5 @@
 import { removeWineFromCart, updateCartItem } from "../../../api/cart";
+import { API_BASE } from "../../../constants/apiConstant";
 import { useAppDispatch, useAppSelector } from "../../../hooks/redux";
 import { Wine, wineType } from "../../../types/Wine";
 
@@ -53,7 +54,7 @@ export const CartItem: React.FC<CartItemProps> = ({ item, wine }) => {
       >
         <div className="w-70 flex-shrink-0 flex justify-center">
           <img
-            src={`http://localhost:8080${wine.imageUrl}`}
+            src={API_BASE + wine.imageUrl}
             alt="Вино"
             className="h-70 object-contain"
           />

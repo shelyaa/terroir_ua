@@ -1,8 +1,9 @@
 import axios from "axios";
 import qs from "qs";
 
-import { Wine } from "../types/Wine";
-import { FiltersQuery } from "../types/Filters";
+import {Wine} from "../types/Wine";
+import {FiltersQuery} from "../types/Filters";
+import {API_BASE} from "../constants/apiConstant";
 
 interface PageResponse<T> {
   content: T[];
@@ -18,11 +19,11 @@ export const getWines = async (
   filters?: FiltersQuery
 ): Promise<PageResponse<Wine>> => {
   const response = await axios.get<PageResponse<Wine>>(
-    "http://localhost:8080/wines/search",
+    `${API_BASE}/wines/search`,
     {
       params: filters,
       paramsSerializer: {
-        serialize: (params) => qs.stringify(params, { arrayFormat: "repeat" }),
+        serialize: (params) => qs.stringify(params, {arrayFormat: "repeat"}),
       },
     }
   );
@@ -32,24 +33,23 @@ export const getWines = async (
 
 export const getWinesItems = async (): Promise<PageResponse<Wine>> => {
   const response = await axios.get<PageResponse<Wine>>(
-    "http://localhost:8080/wines/items"
+    `${API_BASE}/wines/items`
   );
 
   return response.data;
 };
+
 export const deleteWine = async (id: string, token: string | undefined) => {
-  const response = await axios.delete(`http://localhost:8080/wines/${id}`, {
+  const response = await axios.delete(`${API_BASE}/wines/${id}`, {
     headers: {
-      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      ...(token ? {Authorization: `Bearer ${token}`} : {}),
     },
   });
   return response.data;
 };
 
 export const getWineById = async (id: string): Promise<Wine> => {
-  const response = await axios.get<Wine>(
-    `http://localhost:8080/wines/${id}`
-  );
+  const response = await axios.get<Wine>(`${API_BASE}/wines/${id}`);
 
   return response.data;
 };

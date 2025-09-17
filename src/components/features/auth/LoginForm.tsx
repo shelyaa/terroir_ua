@@ -1,12 +1,13 @@
-import { Label } from "../.././ui/label";
-import { Input } from "../.././ui/input";
-import { Button } from "../.././ui/button";
-import { Link, useNavigate } from "react-router-dom";
-import { FC, useEffect, useState } from "react";
-import { GoogleLoginButton } from "./GoogleLoginButton";
-import { useAppDispatch } from "../../../hooks/redux";
-import { setUser } from "../../../store/slices/userSlice";
+import {Label} from "../.././ui/label";
+import {Input} from "../.././ui/input";
+import {Button} from "../.././ui/button";
+import {Link, useNavigate} from "react-router-dom";
+import {FC, useEffect, useState} from "react";
+import {GoogleLoginButton} from "./GoogleLoginButton";
+import {useAppDispatch} from "../../../hooks/redux";
+import {setUser} from "../../../store/slices/userSlice";
 import axios from "axios";
+import { API_BASE } from "../../../constants/apiConstant";
 
 interface FormProps {
   handleClick: (email: string, pass: string) => Promise<boolean>;
@@ -14,7 +15,7 @@ interface FormProps {
   setError: (error: string) => void;
 }
 
-export const LoginForm: FC<FormProps> = ({ handleClick, error, setError }) => {
+export const LoginForm: FC<FormProps> = ({handleClick, error, setError}) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
@@ -41,11 +42,11 @@ export const LoginForm: FC<FormProps> = ({ handleClick, error, setError }) => {
     // 3) optional: fetch user
     (async () => {
       try {
-        const meRes = await axios.get("http://localhost:8080/users/me", {
-          headers: { Authorization: `Bearer ${token}` },
+        const meRes = await axios.get(`${API_BASE}/users/me`, {
+          headers: {Authorization: `Bearer ${token}`},
         });
-        const { id, name, email: userEmail } = meRes.data;
-        const user = { id, name, email: userEmail, token, role };
+        const {id, name, email: userEmail} = meRes.data;
+        const user = {id, name, email: userEmail, token, role};
 
         dispatch(setUser(user));
         localStorage.setItem("user", JSON.stringify(user));
@@ -55,7 +56,7 @@ export const LoginForm: FC<FormProps> = ({ handleClick, error, setError }) => {
         const post = localStorage.getItem("postLoginRedirect") || "/account";
         localStorage.removeItem("postLoginRedirect");
 
-        navigate(role === "ROLE_MANAGER" ? "/admin" : post, { replace: true });
+        navigate(role === "ROLE_MANAGER" ? "/admin" : post, {replace: true});
       } catch (e) {
         console.error("Failed to load /users/me after OAuth", e);
       }

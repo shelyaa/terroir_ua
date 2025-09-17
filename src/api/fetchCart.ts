@@ -1,15 +1,15 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
+import { API_BASE } from "../constants/apiConstant";
 
-// Отримання кошика для авторизованого користувача (токен у headers)
+
 export const fetchCart = createAsyncThunk(
   "cart/fetchCart",
   async (_, { getState, rejectWithValue }) => {
     try {
-      // Зберігаємо токен у user.token (зроби відповідну структуру userSlice)
       const state: any = getState();
       const token = state.user.token;
-      const res = await axios.get("http://localhost:8080/cart", {
+      const res = await axios.get(`${API_BASE}/cart`, {
         headers: {
           Authorization: `Bearer ${token}`
         }

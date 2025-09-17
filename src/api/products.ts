@@ -1,5 +1,6 @@
 import axios from "axios";
-import { Wine } from "../types/Wine";
+import {Wine} from "../types/Wine";
+import {API_BASE} from "../constants/apiConstant";
 
 type ErrorResponse = Record<string, string[]> | Record<string, string>;
 
@@ -9,24 +10,20 @@ export async function addProduct(
 ): Promise<Partial<ErrorResponse>> {
   try {
     console.log(token);
-    await axios.post<Wine>(
-      "http://localhost:8080/wines",
-      formData,
-      {
-        headers: {
-          ...(token ? { Authorization: `Bearer ${token}` } : {}),
-        },
-      }
-    );
+    await axios.post<Wine>(`${API_BASE}/wines`, formData, {
+      headers: {
+        ...(token ? {Authorization: `Bearer ${token}`} : {}),
+      },
+    });
     return {};
   } catch (error: any) {
     if (error.response && error.response.data) {
       if (typeof error.response.data === "string") {
-        return { general: error.response.data };
+        return {general: error.response.data};
       }
       return error.response.data;
     }
-    return { general: "Невідома помилка при додаванні продукту." };
+    return {general: "Невідома помилка при додаванні продукту."};
   }
 }
 
@@ -37,23 +34,19 @@ export async function updateProduct(
 ): Promise<Partial<ErrorResponse>> {
   try {
     console.log(token);
-    await axios.put<Wine>(
-      `http://localhost:8080/wines/${id}`,
-      formData,
-      {
-        headers: {
-          ...(token ? { Authorization: `Bearer ${token}` } : {}),
-        },
-      }
-    );
+    await axios.put<Wine>(`${API_BASE}/wines/${id}`, formData, {
+      headers: {
+        ...(token ? {Authorization: `Bearer ${token}`} : {}),
+      },
+    });
     return {};
   } catch (error: any) {
     if (error.response && error.response.data) {
       if (typeof error.response.data === "string") {
-        return { general: error.response.data };
+        return {general: error.response.data};
       }
       return error.response.data;
     }
-    return { general: "Невідома помилка при оновленні продукту." };
+    return {general: "Невідома помилка при оновленні продукту."};
   }
 }

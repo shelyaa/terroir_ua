@@ -1,20 +1,21 @@
 import Autoplay from "embla-carousel-autoplay";
 import useEmblaCarousel from "embla-carousel-react";
-import { ChevronLeft, ChevronRight } from "lucide-react";
-import { FC, useCallback, useEffect, useState } from "react";
-import { Wine } from "../../../types/Wine";
-import { ProductCard } from "./ProductCard";
+import {ChevronLeft, ChevronRight} from "lucide-react";
+import {FC, useCallback, useEffect, useState} from "react";
+import {Wine} from "../../../types/Wine";
+import {ProductCard} from "./ProductCard";
+import { API_BASE } from "../../../constants/apiConstant";
 
 export const WineSlider: FC = () => {
   const [products, setProducts] = useState<Wine[]>([]);
   const [loading, setLoading] = useState(true);
-  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: false }, [Autoplay()]);
+  const [emblaRef, emblaApi] = useEmblaCarousel({loop: false}, [Autoplay()]);
 
   useEffect(() => {
     if (emblaApi) {
       console.log(emblaApi.slideNodes()); // Access API
     }
-    fetch("http://localhost:8080/wines")
+    fetch(`${API_BASE}/wines`)
       .then((response) => response.json())
       .then((data) => {
         setProducts(data.content);

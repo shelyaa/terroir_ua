@@ -1,30 +1,27 @@
-import { FC, useEffect, useState, useCallback } from "react";
+import {FC, useEffect, useState, useCallback} from "react";
 import useEmblaCarousel from "embla-carousel-react";
-import { Wine } from "../../../types/Wine";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import {Wine} from "../../../types/Wine";
+import {ChevronLeft, ChevronRight} from "lucide-react";
 import Autoplay from "embla-carousel-autoplay";
-import { ProductCard } from "./ProductCard";
+import {ProductCard} from "./ProductCard";
+import { API_BASE } from "../../../constants/apiConstant";
 
 type RecommendationSliderProps = {
   id: string | number;
 };
 
-export const RecommendationSlider: FC<RecommendationSliderProps> = ({ id }) => {
+export const RecommendationSlider: FC<RecommendationSliderProps> = ({id}) => {
   const [products, setProducts] = useState<Wine[]>([]);
   const [loading, setLoading] = useState(true);
-  const [emblaRef, emblaApi] = useEmblaCarousel(
-    { loop: false },
-    [Autoplay()]
-  );
+  const [emblaRef, emblaApi] = useEmblaCarousel({loop: false}, [Autoplay()]);
 
   useEffect(() => {
-    fetch(`http://localhost:8080/wines/${id}/recommendations`)
+    fetch(`${API_BASE}/wines/${id}/recommendations`)
       .then((response) => response.json())
       .then((data) => {
         setProducts(Array.isArray(data) ? data : []);
         setLoading(false);
-          console.log(data)
-
+        console.log(data);
       })
       .catch(() => {
         setProducts([]);

@@ -9,6 +9,7 @@ import { useCart } from "../../../hooks/useCart";
 import { RecommendationSlider } from "./RecommendationSlider";
 import { WineDetailsSkeleton } from "../../ui/WineDetailsSkeleton";
 import { getWineById } from "../../../api/wines";
+import { API_BASE } from "../../../constants/apiConstant";
 
 export const WineDetails = () => {
   const { id } = useParams();
@@ -68,7 +69,7 @@ export const WineDetails = () => {
         {/* Image and rating block - on mobile comes first */}
         <div className="flex flex-col items-center order-first md:order-last mb-2 md:mb-0">
           <img
-            src={`http://localhost:8080${wine.imageUrl}`}
+            src={`${API_BASE} ${wine.imageUrl}`}
             alt={wine.name}
             className="w-full max-w-xs sm:w-90 "
           />

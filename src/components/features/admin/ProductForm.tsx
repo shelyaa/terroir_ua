@@ -1,15 +1,16 @@
-import { useEffect, useState } from "react";
-import { Wine, wineType } from "../../../types/Wine";
-import { Label } from "../../ui/label";
-import { FormInput } from "../../ui/input";
-import { Button } from "../../ui/button";
-import { Textarea } from "../../ui/textarea";
-import { addProduct, updateProduct } from "../../../api/products";
-import { useAuth } from "../../../hooks/useAuth";
-import { useNavigate } from "react-router-dom";
+import {useEffect, useState} from "react";
+import {Wine, wineType} from "../../../types/Wine";
+import {Label} from "../../ui/label";
+import {FormInput} from "../../ui/input";
+import {Button} from "../../ui/button";
+import {Textarea} from "../../ui/textarea";
+import {addProduct, updateProduct} from "../../../api/products";
+import {useAuth} from "../../../hooks/useAuth";
+import {useNavigate} from "react-router-dom";
+import { API_BASE } from "../../../constants/apiConstant";
 
-export function ProductForm({ product }: { product?: Wine | null }) {
-  const { token } = useAuth();
+export function ProductForm({product}: {product?: Wine | null}) {
+  const {token} = useAuth();
   const navigate = useNavigate();
 
   type FormDataType = {
@@ -84,7 +85,7 @@ export function ProductForm({ product }: { product?: Wine | null }) {
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
     >
   ) => {
-    const { name, value, type } = e.target;
+    const {name, value, type} = e.target;
     setFormData((prev) => ({
       ...prev,
       [name]: type === "number" ? (value === "" ? "" : Number(value)) : value,
@@ -121,7 +122,7 @@ export function ProductForm({ product }: { product?: Wine | null }) {
     const fd = new FormData();
     fd.append(
       "wine",
-      new Blob([JSON.stringify(payload)], { type: "application/json" })
+      new Blob([JSON.stringify(payload)], {type: "application/json"})
     );
     if (imageFile) {
       fd.append("image", imageFile);
@@ -324,7 +325,7 @@ export function ProductForm({ product }: { product?: Wine | null }) {
             />
             {product && (
               <img
-                src={`http://localhost:8080` + product.imageUrl}
+                src={API_BASE + product.imageUrl}
                 height="200"
                 width="200"
                 alt="Product Image"

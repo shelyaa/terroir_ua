@@ -1,31 +1,32 @@
-import { ChevronLeft } from "lucide-react";
-import { FormInput } from "../../ui/input";
-import { useEffect, useState } from "react";
-import { Textarea } from "../../ui/textarea";
-import { useNavigate } from "react-router-dom";
-import { Label } from "../../ui/label";
-import { useAppSelector } from "../../../hooks/redux";
-import { useAuth } from "../../../hooks/useAuth";
-import { OrderUser } from "../../../types/Order";
-import { createOrder } from "../../../api/order";
-import { OrderPayment } from "./OrderPayment";
-import { Button } from "../../ui/button";
-import { PatternFormat } from "react-number-format";
+import {ChevronLeft} from "lucide-react";
+import {FormInput} from "../../ui/input";
+import {useEffect, useState} from "react";
+import {Textarea} from "../../ui/textarea";
+import {useNavigate} from "react-router-dom";
+import {Label} from "../../ui/label";
+import {useAppSelector} from "../../../hooks/redux";
+import {useAuth} from "../../../hooks/useAuth";
+import {OrderUser} from "../../../types/Order";
+import {createOrder} from "../../../api/order";
+import {OrderPayment} from "./OrderPayment";
+import {Button} from "../../ui/button";
+import {PatternFormat} from "react-number-format";
+import {API_BASE} from "../../../constants/apiConstant";
 
 type OrderProps = {
   onReturn: () => void;
 };
 
-export const OrderForm = ({ onReturn }: OrderProps) => {
+export const OrderForm = ({onReturn}: OrderProps) => {
   const [error, setError] = useState<Record<string, string>>({});
   const [pending, setPending] = useState(false);
   const [selected, setSelected] = useState("card");
   const checkoutUser = useAppSelector((state) => state.checkoutUser);
-  const { token } = useAuth();
+  const {token} = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    window.scrollTo({top: 0, behavior: "smooth"});
   }, []);
 
   const [orderFormData, setOrderFormData] = useState<OrderUser>({
@@ -44,7 +45,7 @@ export const OrderForm = ({ onReturn }: OrderProps) => {
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
     >
   ) => {
-    const { name, value } = e.target;
+    const {name, value} = e.target;
     setOrderFormData((prev) => ({
       ...prev,
       [name]: value,
@@ -100,10 +101,10 @@ export const OrderForm = ({ onReturn }: OrderProps) => {
       return;
     }
 
-    const res = await fetch("http://localhost:8080/payments", {
+    const res = await fetch(`${API_BASE}/payments`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ orderId }),
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({orderId}),
     });
     if (!res.ok) {
       alert("Помилка при створенні платежу");

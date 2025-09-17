@@ -4,6 +4,7 @@ import { getOrderItems, getUserOrders } from "../api/order";
 import { getWineById } from "../api/wines";
 import { Loading } from "../components/ui/loading";
 import { Order } from "../types/Order";
+import { API_BASE } from "../constants/apiConstant";
 
 export type OrderItem = {
   id: string;
@@ -128,7 +129,7 @@ export const MyOrdersPage = () => {
                         src={
                           item.isDeleted
                             ? item.imageUrl
-                            : `http://localhost:8080${item.imageUrl}`
+                            : `${API_BASE} ${item.imageUrl}`
                         }
                         alt={item.name}
                         className="w-32 h-40 object-cover rounded"

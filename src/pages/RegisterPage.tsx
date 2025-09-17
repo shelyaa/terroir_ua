@@ -4,6 +4,7 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { useAppDispatch } from "../hooks/redux";
 import { useState } from "react";
 import axios from "axios";
+import { API_BASE } from "../constants/apiConstant";
 
 export const RegisterPage = () => {
   const dispatch = useAppDispatch();
@@ -18,14 +19,14 @@ export const RegisterPage = () => {
     name: string
   ): Promise<void> => {
     try {
-      await axios.post("http://localhost:8080/auth/registration", {
+      await axios.post(`${API_BASE}/auth/registration`, {
         email,
         password,
         repeatPassword: password,
         name,
       });
 
-      const loginRes = await axios.post("http://localhost:8080/auth/login", {
+      const loginRes = await axios.post(`${API_BASE}/auth/login`, {
         email,
         password,
       });

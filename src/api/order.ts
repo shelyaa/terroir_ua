@@ -1,11 +1,13 @@
 import axios from "axios";
+import { API_BASE } from "../constants/apiConstant";
+
 
 export const createOrder = async (payload: any, token: string) => {
   try {
-    const response = await axios.post("http://localhost:8080/orders", payload, {
+    const response = await axios.post(`${API_BASE}/orders`, payload, {
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`, 
+        Authorization: `Bearer ${token}`,
       },
     });
     const data = response.data;
@@ -21,7 +23,7 @@ export const createOrder = async (payload: any, token: string) => {
 
 export const getUserOrders = async (token: string) => {
   try {
-    const response = await axios.get("http://localhost:8080/orders", {
+    const response = await axios.get(`${API_BASE}/orders`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -35,7 +37,7 @@ export const getUserOrders = async (token: string) => {
 
 export const getOrderItems = async (id: string, token: string) => {
   try {
-    const response = await axios.get(`http://localhost:8080/orders/${id}/items`, {
+    const response = await axios.get(`${API_BASE}/orders/${id}/items`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -46,5 +48,3 @@ export const getOrderItems = async (id: string, token: string) => {
     return null;
   }
 };
-
-

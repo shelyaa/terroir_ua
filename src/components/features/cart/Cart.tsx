@@ -1,22 +1,23 @@
-import { ChevronLeft } from "lucide-react";
-import { useEffect, useState, useCallback } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { useAppDispatch, useAppSelector } from "../../../hooks/redux";
-import { fetchCart } from "../../../api/fetchCart";
-import { CartItem } from "./CartItem";
-import { SkeletonCartItem } from "../../ui/SkeletonCartItem";
-import { useAuth } from "../../../hooks/useAuth";
-import { Wine } from "../../../types/Wine";
+import {ChevronLeft} from "lucide-react";
+import {useEffect, useState, useCallback} from "react";
+import {Link, useNavigate} from "react-router-dom";
+import {useAppDispatch, useAppSelector} from "../../../hooks/redux";
+import {fetchCart} from "../../../api/fetchCart";
+import {CartItem} from "./CartItem";
+import {SkeletonCartItem} from "../../ui/SkeletonCartItem";
+import {useAuth} from "../../../hooks/useAuth";
+import {Wine} from "../../../types/Wine";
+import { API_BASE } from "../../../constants/apiConstant";
 
 type CartProps = {
   onCheckout: () => void;
 };
 
-export const Cart = ({ onCheckout }: CartProps) => {
-  const { token } = useAuth();
+export const Cart = ({onCheckout}: CartProps) => {
+  const {token} = useAuth();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { isAuth } = useAuth();
+  const {isAuth} = useAuth();
 
   const cartItems = useAppSelector((state) => state.cart.cartItems);
   const amount = useAppSelector((state) => state.cart.amount);
@@ -47,7 +48,7 @@ export const Cart = ({ onCheckout }: CartProps) => {
     // setLoading(true);
     Promise.all(
       cartItems.map((item) =>
-        fetch(`http://localhost:8080/wines/${item.wineId}`)
+        fetch(`${API_BASE}/wines/${item.wineId}`)
           .then((res) => res.json())
           .then((data) => [item.wineId, data])
       )
@@ -116,7 +117,7 @@ export const Cart = ({ onCheckout }: CartProps) => {
       <div className="bg-white">
         {loading && (
           <div className="pt-8">
-            {Array.from({ length: 5 }).map((_, i) => (
+            {Array.from({length: 5}).map((_, i) => (
               <SkeletonCartItem key={i} />
             ))}
           </div>
